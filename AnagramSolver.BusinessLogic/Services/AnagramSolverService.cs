@@ -45,7 +45,7 @@ namespace AnagramSolver.BusinessLogic.Services
 
             if (anagrams.ContainsKey(orderedWord))
             {
-                if(_validationService.ValidateNumberOfAnagrams(anagrams, orderedWord) == true)
+                if(anagrams[orderedWord].Count <= wordHandlingOptions.NumberOfAnagrams)
                 {
                     return anagrams[orderedWord];
                 }

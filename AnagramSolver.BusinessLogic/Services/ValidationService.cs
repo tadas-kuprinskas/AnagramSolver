@@ -30,21 +30,5 @@ namespace AnagramSolver.BusinessLogic.Services
                 throw new ArgumentException($"Input cannot be shorter than {wordHandlingOptions.MinInputLength}");
             }
         }
-
-        public bool ValidateNumberOfAnagrams(Dictionary<string, List<Word>> anagrams, string sortedWord)
-        {
-            var wordHandlingOptions = new WordHandlingOptions();
-
-            _configuration.GetSection(WordHandlingOptions.WordHandling).Bind(wordHandlingOptions);
-
-            if (anagrams[sortedWord].Count > wordHandlingOptions.NumberOfAnagrams)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
     }
 }
