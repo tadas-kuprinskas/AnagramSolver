@@ -6,6 +6,6 @@ namespace AnagramSolver.Contracts.Interfaces
     public interface IValidationService
     {
         void ValidateInput(string myWord);
-        IEnumerable<Word> ValidateNumberOfAnagrams(Dictionary<string, List<Word>> anagrams, string sortedWord);
+        bool ValidateNumberOfAnagrams(Dictionary<string, List<Word>> anagrams, string sortedWord);
     }
 }

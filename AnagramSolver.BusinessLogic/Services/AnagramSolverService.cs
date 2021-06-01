@@ -1,5 +1,7 @@
-﻿using AnagramSolver.Contracts.Interfaces;
+﻿using AnagramSolver.BusinessLogic.Utilities;
+using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +15,13 @@ namespace AnagramSolver.BusinessLogic.Services
     {
         private readonly IWordRepository _wordRepository;
         private readonly IValidationService _validationService;
+        private readonly IConfiguration _configuration;
 
-        public AnagramSolverService(IWordRepository wordRepository, IValidationService validationService)
+        public AnagramSolverService(IWordRepository wordRepository, IValidationService validationService, IConfiguration configuration)
         {
             _wordRepository = wordRepository;
             _validationService = validationService;
+            _configuration = configuration;
         }
 
         public IEnumerable<Word> GetUniqueAnagrams(string myWord)
@@ -35,9 +39,20 @@ namespace AnagramSolver.BusinessLogic.Services
         {
             var anagrams = _wordRepository.ReadAndGetDictionary();
 
+            var wordHandlingOptions = new WordHandlingOptions();
+
+            _configuration.GetSection(WordHandlingOptions.WordHandling).Bind(wordHandlingOptions);
+
             if (anagrams.ContainsKey(orderedWord))
             {
-                return _validationService.ValidateNumberOfAnagrams(anagrams, orderedWord);
+                if(_validationService.ValidateNumberOfAnagrams(anagrams, orderedWord) == true)
+                {
+                    return anagrams[orderedWord];
+                }
+                else
+                {
+                    return anagrams[orderedWord].Take(wordHandlingOptions.NumberOfAnagrams);
+                }
             }
             return null;
         }

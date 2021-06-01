@@ -1,6 +1,8 @@
 ﻿using AnagramSolver.BusinessLogic.StaticHelpers;
+using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,23 +13,37 @@ namespace AnagramSolver.BusinessLogic.Services
 {
     public class ValidationService : IValidationService
     {
+        private readonly IConfiguration _configuration;
+
+        public ValidationService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public void ValidateInput(string myWord)
         {
-            if (myWord.Length < ConfigurationValues.GetMinInputLength())
+            var wordHandlingOptions = new WordHandlingOptions();
+            _configuration.GetSection(WordHandlingOptions.WordHandling).Bind(wordHandlingOptions);
+
+            if (myWord.Length < wordHandlingOptions.MinInputLength)
             {
-                throw new ArgumentException($"Input cannot be shorter than {ConfigurationValues.GetMinInputLength()}");
+                throw new ArgumentException($"Input cannot be shorter than {wordHandlingOptions.MinInputLength}");
             }
         }
 
-        public IEnumerable<Word> ValidateNumberOfAnagrams(Dictionary<string, List<Word>> anagrams, string sortedWord)
+        public bool ValidateNumberOfAnagrams(Dictionary<string, List<Word>> anagrams, string sortedWord)
         {
-            if (anagrams[sortedWord].Count > ConfigurationValues.GetNumberOfAnagrams())
+            var wordHandlingOptions = new WordHandlingOptions();
+
+            _configuration.GetSection(WordHandlingOptions.WordHandling).Bind(wordHandlingOptions);
+
+            if (anagrams[sortedWord].Count > wordHandlingOptions.NumberOfAnagrams)
             {
-                return anagrams[sortedWord].Take(ConfigurationValues.GetNumberOfAnagrams());
+                return false;
             }
             else
             {
-                return anagrams[sortedWord];
+                return true;
             }
         }
     }
