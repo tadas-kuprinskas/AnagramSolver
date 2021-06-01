@@ -32,7 +32,6 @@ namespace AnagramSolver.Console
                     .AddSingleton<IWordRepository, WordRepository>()
                     .AddSingleton<IValidationService, ValidationService>()
                     .AddSingleton<IWriter, ConsoleWriter>()
-                    .AddSingleton<IConfiguration>(configuration)
                     .BuildServiceProvider();
         }
     }

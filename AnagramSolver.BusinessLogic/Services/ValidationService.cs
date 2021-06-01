@@ -3,6 +3,7 @@ using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,21 +14,18 @@ namespace AnagramSolver.BusinessLogic.Services
 {
     public class ValidationService : IValidationService
     {
-        private readonly IConfiguration _configuration;
+        private readonly WordHandlingOptions _wordHandlingOptions;
 
-        public ValidationService(IConfiguration configuration)
+        public ValidationService(IOptions<WordHandlingOptions> wordHandlingOptions)
         {
-            _configuration = configuration;
+            _wordHandlingOptions = wordHandlingOptions.Value;
         }
 
         public void ValidateInput(string myWord)
         {
-            var wordHandlingOptions = new WordHandlingOptions();
-            _configuration.GetSection(WordHandlingOptions.WordHandling).Bind(wordHandlingOptions);
-
-            if (myWord.Length < wordHandlingOptions.MinInputLength)
+            if (myWord.Length < _wordHandlingOptions.MinInputLength)
             {
-                throw new ArgumentException($"Input cannot be shorter than {wordHandlingOptions.MinInputLength}");
+                throw new ArgumentException($"Input cannot be shorter than {_wordHandlingOptions.MinInputLength}");
             }
         }
     }

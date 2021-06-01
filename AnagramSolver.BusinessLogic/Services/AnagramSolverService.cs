@@ -2,6 +2,7 @@
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +16,13 @@ namespace AnagramSolver.BusinessLogic.Services
     {
         private readonly IWordRepository _wordRepository;
         private readonly IValidationService _validationService;
-        private readonly IConfiguration _configuration;
+        private readonly WordHandlingOptions _wordHandlingOptions;
 
-        public AnagramSolverService(IWordRepository wordRepository, IValidationService validationService, IConfiguration configuration)
+        public AnagramSolverService(IWordRepository wordRepository, IValidationService validationService, IOptions<WordHandlingOptions> wordHandlingOptions)
         {
             _wordRepository = wordRepository;
             _validationService = validationService;
-            _configuration = configuration;
+            _wordHandlingOptions = wordHandlingOptions.Value;
         }
 
         public IEnumerable<Word> GetUniqueAnagrams(string myWord)
@@ -39,19 +40,15 @@ namespace AnagramSolver.BusinessLogic.Services
         {
             var anagrams = _wordRepository.ReadAndGetDictionary();
 
-            var wordHandlingOptions = new WordHandlingOptions();
-
-            _configuration.GetSection(WordHandlingOptions.WordHandling).Bind(wordHandlingOptions);
-
             if (anagrams.ContainsKey(orderedWord))
             {
-                if(anagrams[orderedWord].Count <= wordHandlingOptions.NumberOfAnagrams)
+                if(anagrams[orderedWord].Count <= _wordHandlingOptions.NumberOfAnagrams)
                 {
                     return anagrams[orderedWord];
                 }
                 else
                 {
-                    return anagrams[orderedWord].Take(wordHandlingOptions.NumberOfAnagrams);
+                    return anagrams[orderedWord].Take(_wordHandlingOptions.NumberOfAnagrams);
                 }
             }
             return null;
