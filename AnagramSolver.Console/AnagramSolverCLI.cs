@@ -23,9 +23,9 @@ namespace AnagramSolver.Console
         public void ReadAndExecute()
         {
             var myWord = _consoleWriter.ReadLine("Please enter your word");
-            var anagrams = _anagramSolverService.GetAnagrams(myWord);
+            var anagrams = _anagramSolverService.GetUniqueAnagrams(myWord);
 
-            _anagramSolverService.PrintAnagrams(anagrams, myWord);
+            _consoleWriter.PrintAnagrams(anagrams, myWord);
         }
     }
 }

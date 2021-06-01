@@ -6,6 +6,6 @@ namespace AnagramSolver.Contracts.Interfaces
 {
     public interface IWordRepository
     {
-        IEnumerable<Word> GetAnagrams(string sortedWord);
+        Dictionary<string, List<Word>> ReadAndGetDictionary();
     }
 }

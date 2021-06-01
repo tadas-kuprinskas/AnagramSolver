@@ -12,29 +12,30 @@ namespace AnagramSolver.BusinessLogic.Services
     public class AnagramSolverService : IAnagramSolverService
     {
         private readonly IWordRepository _wordRepository;
-        private readonly IWriter _consoleWriter;
 
-        public AnagramSolverService(IWordRepository wordRepository, IWriter consoleWriter)
+        public AnagramSolverService(IWordRepository wordRepository)
         {
             _wordRepository = wordRepository;
-            _consoleWriter = consoleWriter;
         }
 
-        public IEnumerable<Word> GetAnagrams(string myWord)
+        public IEnumerable<Word> GetUniqueAnagrams(string myWord)
         {
             var orderedWord = String.Concat(myWord.ToLower().OrderBy(c => c));
 
-            var anagrams = _wordRepository.GetAnagrams(orderedWord);
+            var anagrams = FindAnagrams(orderedWord);
 
             return anagrams.GroupBy(a => a.Value).Select(w => w.First()).ToList();
         }
 
-        public void PrintAnagrams(IEnumerable<Word> anagrams, string myWord)
+        public IEnumerable<Word> FindAnagrams(string orderedWord)
         {
-            foreach (var anagram in anagrams.Where(a => a.Value != myWord))
+            var anagrams = _wordRepository.ReadAndGetDictionary();
+
+            if (anagrams.ContainsKey(orderedWord))
             {
-                _consoleWriter.PrintLine(anagram.Value);
+                return anagrams[orderedWord];
             }
+            return null;
         }
     }
 }

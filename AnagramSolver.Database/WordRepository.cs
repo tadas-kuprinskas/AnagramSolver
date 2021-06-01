@@ -1,4 +1,5 @@
-﻿using AnagramSolver.Contracts.Interfaces;
+﻿using AnagramSolver.BusinessLogic.StaticHelpers;
+using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
 using System;
 using System.Collections.Generic;
@@ -12,16 +13,10 @@ namespace AnagramSolver.Database
     {
         private readonly string path = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), @"../../../AnagramSolver.Contracts/Data/zodynas.txt");
 
-        private readonly Dictionary<string, List<Word>> anagrams;
-
-        public WordRepository()
+        public Dictionary<string, List<Word>> ReadAndGetDictionary()
         {
-            anagrams = new Dictionary<string, List<Word>>();
-            ReadAndAddToDictionary();
-        }
+            Dictionary<string, List<Word>> dictionary = new();
 
-        private void ReadAndAddToDictionary()
-        {
             using FileStream fileStream = File.Open(path, FileMode.Open);
             using StreamReader sr = new(fileStream);
 
@@ -38,44 +33,27 @@ namespace AnagramSolver.Database
 
                 if (orderedWord != null)
                 {
-                    AddWordToDictionary(orderedWord, firstWord, partOfSpeech);
+                    AddWordToDictionary(dictionary, orderedWord, firstWord, partOfSpeech);
                 }
             }
+            return dictionary;
         }
 
-        private void AddWordToDictionary(string orderedWord, string firstWord, string partOfSpeech)
+        private static void AddWordToDictionary(Dictionary<string, List<Word>> anagrams, string orderedWord, string firstWord, 
+            string partOfSpeech)
         {
             if (anagrams.ContainsKey(orderedWord))
             {
                 anagrams[orderedWord].Add(
-                    MapToWord(orderedWord, firstWord, partOfSpeech));
+                    Mapping.MapToWord(orderedWord, firstWord, partOfSpeech));
             }
             else
             {
                 anagrams.Add(orderedWord, new List<Word>()
                 {
-                    MapToWord(orderedWord, firstWord, partOfSpeech)
+                    Mapping.MapToWord(orderedWord, firstWord, partOfSpeech)
                 });
             }
-        }
-
-        private static Word MapToWord(string orderedWord, string firstWord, string partOfSpeech)
-        {
-            return new Word()
-            {
-                Value = firstWord,
-                PartOfSpeech = partOfSpeech,
-                OrderedValue = orderedWord
-            };
-        }
-
-        public IEnumerable<Word> GetAnagrams(string sortedWord)
-        {
-            if (anagrams.ContainsKey(sortedWord))
-            {
-                return anagrams[sortedWord];
-            }
-            return null;
         }
     }
 }

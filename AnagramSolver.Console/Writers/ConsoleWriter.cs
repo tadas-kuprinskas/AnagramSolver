@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AnagramSolver.Contracts.Interfaces;
+using AnagramSolver.Contracts.Models;
 
 namespace AnagramSolver.Console.Writers
 {
@@ -23,6 +24,14 @@ namespace AnagramSolver.Console.Writers
         {
             PrintLine(message);
             return System.Console.ReadLine();
+        }
+
+        public void PrintAnagrams(IEnumerable<Word> anagrams, string myWord)
+        {
+            foreach (var anagram in anagrams.Where(a => a.Value != myWord))
+            {
+                PrintLine(anagram.Value);
+            }
         }
     }
 }
