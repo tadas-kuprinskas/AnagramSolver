@@ -11,7 +11,6 @@ namespace AnagramSolver.Console
     public class AnagramSolverCLI
     {
         private readonly IAnagramSolverService _anagramSolverService;
-
         private readonly IWriter _consoleWriter;
 
         public AnagramSolverCLI(IAnagramSolverService anagramSolverService, IWriter consoleWriter)
@@ -22,10 +21,17 @@ namespace AnagramSolver.Console
 
         public void ReadAndExecute()
         {
-            var myWord = _consoleWriter.ReadLine("Please enter your word");
-            var anagrams = _anagramSolverService.GetUniqueAnagrams(myWord);
+            try
+            {
+                var myWord = _consoleWriter.ReadLine("Please enter your word");
+                var anagrams = _anagramSolverService.GetUniqueAnagrams(myWord);
 
-            _consoleWriter.PrintAnagrams(anagrams, myWord);
+                _consoleWriter.PrintAnagrams(anagrams, myWord);
+            }
+            catch (ArgumentException ex)
+            {
+                _consoleWriter.PrintLine(ex.Message);
+            }
         }
     }
 }

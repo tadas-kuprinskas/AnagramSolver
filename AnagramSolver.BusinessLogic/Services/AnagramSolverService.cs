@@ -12,14 +12,18 @@ namespace AnagramSolver.BusinessLogic.Services
     public class AnagramSolverService : IAnagramSolverService
     {
         private readonly IWordRepository _wordRepository;
+        private readonly IValidationService _validationService;
 
-        public AnagramSolverService(IWordRepository wordRepository)
+        public AnagramSolverService(IWordRepository wordRepository, IValidationService validationService)
         {
             _wordRepository = wordRepository;
+            _validationService = validationService;
         }
 
         public IEnumerable<Word> GetUniqueAnagrams(string myWord)
         {
+            _validationService.ValidateInput(myWord);
+
             var orderedWord = String.Concat(myWord.ToLower().OrderBy(c => c));
 
             var anagrams = FindAnagrams(orderedWord);
@@ -33,7 +37,7 @@ namespace AnagramSolver.BusinessLogic.Services
 
             if (anagrams.ContainsKey(orderedWord))
             {
-                return anagrams[orderedWord];
+                return _validationService.ValidateNumberOfAnagrams(anagrams, orderedWord);
             }
             return null;
         }

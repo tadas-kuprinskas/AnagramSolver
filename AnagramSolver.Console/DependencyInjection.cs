@@ -19,6 +19,7 @@ namespace AnagramSolver.Console
                 .AddSingleton<AnagramSolverCLI>()
                 .AddSingleton<IAnagramSolverService, AnagramSolverService>()
                 .AddSingleton<IWordRepository, WordRepository>()
+                .AddSingleton<IValidationService, ValidationService>()
                 .AddSingleton<IWriter, ConsoleWriter>()
                 .BuildServiceProvider();
         }
