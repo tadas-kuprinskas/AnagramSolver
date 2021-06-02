@@ -34,7 +34,7 @@ namespace AnagramSolver.BusinessLogic.Services
 
             if (myWordTrimmed.Split(" ").Length >= 2)
             {
-                return FindMultipleWordsAnagrams(myWordTrimmed);
+                return FindMultipleWordsAnagrams(myWordTrimmed).Where(w => !myWordTrimmed.Split(" ").Contains(w.Value));
             }
             else if(myWordTrimmed.Split(" ").Length < 2)
             {
@@ -62,22 +62,20 @@ namespace AnagramSolver.BusinessLogic.Services
         public IEnumerable<Word> FindMultipleWordsAnagrams(string myWordTrimmed)
         {
             var words = myWordTrimmed.Split(" ");
+
             List<IEnumerable<Word>> listOfLists = new();
-            List<Word> listOfWords = new();
+
+            var listOfWords = new HashSet<Word>(new WordComparer());
+
+            var orderedWord1 = String.Concat(myWordTrimmed.ToLower().OrderBy(c => c));
 
             foreach (var word in words)
             {
-                var orderedWord = String.Concat(word.ToLower().OrderBy(c => c));
-                listOfLists.Add(FindSingleWordAnagrams(orderedWord));
+                orderedWord1 = String.Concat(word.ToLower().OrderBy(c => c));
+                listOfLists.Add(FindSingleWordAnagrams(orderedWord1));
             }
 
-            foreach (var list in listOfLists)
-            {
-                foreach (var word in list)
-                {
-                    listOfWords.Add(word);
-                }
-            }
+            listOfWords = listOfLists.SelectMany(w => w).OrderBy(w => w.PartOfSpeech).ToHashSet();
 
             return listOfWords;
         }
