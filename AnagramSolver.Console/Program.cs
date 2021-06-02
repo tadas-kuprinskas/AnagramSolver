@@ -9,7 +9,10 @@ namespace AnagramSolver
     {
         static void Main(string[] args)
         {
-            var serviceProvider = DependencyInjection.ConfigureServices();
+            var services = new ServiceCollection();
+            DependencyInjection.ConfigureServices(services);
+
+            var serviceProvider = services.BuildServiceProvider();
 
             var anagramSolverCli = serviceProvider.GetService<AnagramSolverCLI>();
 
