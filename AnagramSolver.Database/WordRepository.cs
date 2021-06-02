@@ -37,11 +37,11 @@ namespace AnagramSolver.Database
                 {
                     AddWordToDictionary(dictionary, orderedFirstWord, firstWord, partOfSpeech);
                 }
-
-                if(orderedSecondWord != null)
+  
+                if (orderedSecondWord != null)
                 {
                     AddWordToDictionary(dictionary, orderedSecondWord, secondWord, partOfSpeech);
-                }
+                }              
             }
             return dictionary;
         }
@@ -51,8 +51,11 @@ namespace AnagramSolver.Database
         {
             if (anagrams.ContainsKey(orderedWord))
             {
-                anagrams[orderedWord].Add(
+                if (!anagrams[orderedWord].Exists(w => w.Value.ToLower() == word.ToLower()))
+                {
+                    anagrams[orderedWord].Add(
                     Mapping.MapToWord(orderedWord, word, partOfSpeech));
+                }                       
             }
             else
             {

@@ -31,8 +31,7 @@ namespace AnagramSolver.Console
                     .AddSingleton<IAnagramSolverService, AnagramSolverService>()
                     .AddSingleton<IWordRepository, WordRepository>()
                     .AddSingleton<IValidationService, ValidationService>()
-                    .AddSingleton<IWriter, ConsoleWriter>()
-                    .BuildServiceProvider();
+                    .AddSingleton<IWriter, ConsoleWriter>();
         }
     }
 }

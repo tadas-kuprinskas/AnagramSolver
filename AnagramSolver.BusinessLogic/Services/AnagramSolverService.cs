@@ -34,9 +34,7 @@ namespace AnagramSolver.BusinessLogic.Services
 
             var orderedWord = String.Concat(myWordTrimmed.ToLower().OrderBy(c => c));
 
-            var anagrams = FindAnagrams(orderedWord);
-
-            return anagrams.Where(a => a.Value != myWordTrimmed).GroupBy(a => a.Value).Select(w => w.First()).ToList();
+            return FindAnagrams(orderedWord);
         }
 
         public IEnumerable<Word> FindAnagrams(string orderedWord)
@@ -45,14 +43,7 @@ namespace AnagramSolver.BusinessLogic.Services
 
             if (anagrams.ContainsKey(orderedWord))
             {
-                if(anagrams[orderedWord].Count <= _wordHandlingOptions.NumberOfAnagrams)
-                {
-                    return anagrams[orderedWord];
-                }
-                else
-                {
-                    return anagrams[orderedWord].Take(_wordHandlingOptions.NumberOfAnagrams);
-                }
+                return anagrams[orderedWord].Take(_wordHandlingOptions.NumberOfAnagrams);
             }
             return null;
         }
