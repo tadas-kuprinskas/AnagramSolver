@@ -27,13 +27,16 @@ namespace AnagramSolver.BusinessLogic.Services
 
         public IEnumerable<Word> GetUniqueAnagrams(string myWord)
         {
-            _validationService.ValidateInput(myWord);
+            char[] charsToTrim = { '*', ' ', '\'' };
+            var myWordTrimmed = myWord.Trim(charsToTrim);
 
-            var orderedWord = String.Concat(myWord.ToLower().OrderBy(c => c));
+            _validationService.ValidateInputLength(myWordTrimmed);
+
+            var orderedWord = String.Concat(myWordTrimmed.ToLower().OrderBy(c => c));
 
             var anagrams = FindAnagrams(orderedWord);
 
-            return anagrams.GroupBy(a => a.Value).Select(w => w.First()).ToList();
+            return anagrams.Where(a => a.Value != myWordTrimmed).GroupBy(a => a.Value).Select(w => w.First()).ToList();
         }
 
         public IEnumerable<Word> FindAnagrams(string orderedWord)

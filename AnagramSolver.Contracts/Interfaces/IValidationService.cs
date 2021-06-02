@@ -5,6 +5,6 @@ namespace AnagramSolver.Contracts.Interfaces
 {
     public interface IValidationService
     {
-        void ValidateInput(string myWord);
+        void ValidateInputLength(string myWord);
     }
 }

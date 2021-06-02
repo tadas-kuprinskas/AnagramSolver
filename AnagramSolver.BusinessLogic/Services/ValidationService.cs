@@ -21,11 +21,11 @@ namespace AnagramSolver.BusinessLogic.Services
             _wordHandlingOptions = wordHandlingOptions.Value;
         }
 
-        public void ValidateInput(string myWord)
+        public void ValidateInputLength(string myWord)
         {
             if (myWord.Length < _wordHandlingOptions.MinInputLength)
             {
-                throw new ArgumentException($"Input cannot be shorter than {_wordHandlingOptions.MinInputLength}");
+                throw new ArgumentException($"Input cannot be shorter than {_wordHandlingOptions.MinInputLength} letters");
             }
         }
     }

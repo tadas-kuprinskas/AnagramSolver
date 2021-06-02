@@ -27,31 +27,38 @@ namespace AnagramSolver.Database
                 string[] values = line.Split("\t");
 
                 var firstWord = values[0];
+                var secondWord = values[2];
                 var partOfSpeech = values[1];
 
-                var orderedWord = String.Concat(firstWord.ToLower().OrderBy(c => c));
+                var orderedFirstWord = String.Concat(firstWord.ToLower().OrderBy(c => c));
+                var orderedSecondWord = String.Concat(secondWord.ToLower().OrderBy(c => c));
 
-                if (orderedWord != null)
+                if (orderedFirstWord != null)
                 {
-                    AddWordToDictionary(dictionary, orderedWord, firstWord, partOfSpeech);
+                    AddWordToDictionary(dictionary, orderedFirstWord, firstWord, partOfSpeech);
+                }
+
+                if(orderedSecondWord != null)
+                {
+                    AddWordToDictionary(dictionary, orderedSecondWord, secondWord, partOfSpeech);
                 }
             }
             return dictionary;
         }
 
-        private static void AddWordToDictionary(Dictionary<string, List<Word>> anagrams, string orderedWord, string firstWord, 
+        private static void AddWordToDictionary(Dictionary<string, List<Word>> anagrams, string orderedWord, string word, 
             string partOfSpeech)
         {
             if (anagrams.ContainsKey(orderedWord))
             {
                 anagrams[orderedWord].Add(
-                    Mapping.MapToWord(orderedWord, firstWord, partOfSpeech));
+                    Mapping.MapToWord(orderedWord, word, partOfSpeech));
             }
             else
             {
                 anagrams.Add(orderedWord, new List<Word>()
                 {
-                    Mapping.MapToWord(orderedWord, firstWord, partOfSpeech)
+                    Mapping.MapToWord(orderedWord, word, partOfSpeech)
                 });
             }
         }
