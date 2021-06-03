@@ -42,7 +42,7 @@ namespace AnagramSolver.Tests.AnagramSolver.Console
         }
 
         [Test]
-        public void ReadAndExecute_GivenInvalidWord_ThrowsArgumentException()
+        public void ReadAndExecute_GivenValidWord_ThrowsNoException()
         {
             Mock<IWriter> _consoleWriter = new();
             _consoleWriter.Setup(m => m.ReadLine("\nPlease enter your word:")).Returns("sula");
