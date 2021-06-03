@@ -28,9 +28,9 @@ namespace AnagramSolver.Console.Writers
 
         public void PrintAnagrams(IEnumerable<Word> anagrams, string myWord)
         {
-            foreach (var anagram in anagrams.Where(a => a.Value != myWord))
+            foreach (var anagram in anagrams)
             {
-                PrintLine(anagram.Value);
+                System.Console.Write($"{anagram.Value} ");             
             }
         }
     }

@@ -13,9 +13,9 @@ namespace AnagramSolver.Database
     {
         private readonly string path = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), @"../../../AnagramSolver.Contracts/Data/zodynas.txt");
 
-        public Dictionary<string, List<Word>> ReadAndGetDictionary()
+        public Dictionary<string, HashSet<Word>> ReadAndGetDictionary()
         {
-            Dictionary<string, List<Word>> dictionary = new();
+            Dictionary<string, HashSet<Word>> dictionary = new();
 
             using FileStream fileStream = File.Open(path, FileMode.Open);
             using StreamReader sr = new(fileStream);
@@ -46,20 +46,17 @@ namespace AnagramSolver.Database
             return dictionary;
         }
 
-        private static void AddWordToDictionary(Dictionary<string, List<Word>> anagrams, string orderedWord, string word, 
+        private static void AddWordToDictionary(Dictionary<string, HashSet<Word>> anagrams, string orderedWord, string word, 
             string partOfSpeech)
         {
             if (anagrams.ContainsKey(orderedWord))
             {
-                if (!anagrams[orderedWord].Exists(w => w.Value.ToLower() == word.ToLower()))
-                {
-                    anagrams[orderedWord].Add(
-                    Mapping.MapToWord(orderedWord, word, partOfSpeech));
-                }                       
+                anagrams[orderedWord].Add(
+                Mapping.MapToWord(orderedWord, word, partOfSpeech));                     
             }
             else
             {
-                anagrams.Add(orderedWord, new List<Word>()
+                anagrams.Add(orderedWord, new HashSet<Word>()
                 {
                     Mapping.MapToWord(orderedWord, word, partOfSpeech)
                 });

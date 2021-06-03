@@ -23,10 +23,17 @@ namespace AnagramSolver.Console
         {
             try
             {
-                var myWord = _consoleWriter.ReadLine("Please enter your word");
+                var myWord = _consoleWriter.ReadLine("\nPlease enter your word:");
                 var anagrams = _anagramSolverService.GetUniqueAnagrams(myWord);
 
-                _consoleWriter.PrintAnagrams(anagrams, myWord);
+                if(!anagrams.Any())
+                {
+                    _consoleWriter.PrintLine($"Your word \"{myWord}\" has no anagrams");
+                }
+                else
+                {
+                    _consoleWriter.PrintAnagrams(anagrams, myWord);
+                }    
             }
             catch (ArgumentException ex)
             {

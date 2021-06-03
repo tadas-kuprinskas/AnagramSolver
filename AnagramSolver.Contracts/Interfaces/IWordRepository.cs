@@ -6,6 +6,6 @@ namespace AnagramSolver.Contracts.Interfaces
 {
     public interface IWordRepository
     {
-        Dictionary<string, List<Word>> ReadAndGetDictionary();
+        Dictionary<string, HashSet<Word>> ReadAndGetDictionary();
     }
 }

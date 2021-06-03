@@ -32,12 +32,10 @@ namespace AnagramSolver.BusinessLogic.Services
 
             _validationService.ValidateInputLength(myWordTrimmed);
 
-            var orderedWord = String.Concat(myWordTrimmed.ToLower().OrderBy(c => c));
-
-            return FindAnagrams(orderedWord);
+            return FindMultipleWordsAnagrams(myWordTrimmed).Where(w => !myWordTrimmed.Split(" ").Contains(w.Value));        
         }
 
-        public IEnumerable<Word> FindAnagrams(string orderedWord)
+        public IEnumerable<Word> FindSingleWordAnagrams(string orderedWord)
         {
             var anagrams = _wordRepository.ReadAndGetDictionary();
 
@@ -45,7 +43,28 @@ namespace AnagramSolver.BusinessLogic.Services
             {
                 return anagrams[orderedWord].Take(_wordHandlingOptions.NumberOfAnagrams);
             }
-            return null;
+            return Enumerable.Empty<Word>();
+        }
+
+        public IEnumerable<Word> FindMultipleWordsAnagrams(string myWordTrimmed)
+        {
+            var words = myWordTrimmed.Split(" ");
+
+            List<IEnumerable<Word>> listOfLists = new();
+
+            var listOfWords = new HashSet<Word>();
+
+            var orderedWord = String.Concat(myWordTrimmed.ToLower().OrderBy(c => c));
+
+            foreach (var word in words)
+            {
+                orderedWord = String.Concat(word.ToLower().OrderBy(c => c));
+                listOfLists.Add(FindSingleWordAnagrams(orderedWord));
+            }
+
+            listOfWords = listOfLists.Where(l => l != null).SelectMany(l => l).OrderBy(w => w.PartOfSpeech).ToHashSet();
+
+            return listOfWords;
         }
     }
 }
