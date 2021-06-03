@@ -30,7 +30,14 @@ namespace AnagramSolver.Console.Writers
         {
             foreach (var anagram in anagrams.Where(a => a.Value != myWord))
             {
-                PrintLine(anagram.Value);
+                if(myWord.Split(" ").Length >= 2)
+                {
+                    System.Console.Write($"{anagram.Value} ");
+                }
+                else
+                {
+                    PrintLine(anagram.Value);
+                }                
             }
         }
     }

@@ -40,6 +40,8 @@ namespace AnagramSolver.BusinessLogic.Services
             {
                 var orderedWord = String.Concat(myWordTrimmed.ToLower().OrderBy(c => c));
 
+                _validationService.ValidateSingleWordAnagrams(FindSingleWordAnagrams(orderedWord), myWord);
+                
                 return FindSingleWordAnagrams(orderedWord);
             }
             else
@@ -67,15 +69,15 @@ namespace AnagramSolver.BusinessLogic.Services
 
             var listOfWords = new HashSet<Word>(new WordComparer());
 
-            var orderedWord1 = String.Concat(myWordTrimmed.ToLower().OrderBy(c => c));
+            var orderedWord = String.Concat(myWordTrimmed.ToLower().OrderBy(c => c));
 
             foreach (var word in words)
             {
-                orderedWord1 = String.Concat(word.ToLower().OrderBy(c => c));
-                listOfLists.Add(FindSingleWordAnagrams(orderedWord1));
+                orderedWord = String.Concat(word.ToLower().OrderBy(c => c));
+                listOfLists.Add(FindSingleWordAnagrams(orderedWord));
             }
 
-            listOfWords = listOfLists.SelectMany(w => w).OrderBy(w => w.PartOfSpeech).ToHashSet();
+            listOfWords = listOfLists.Where(l => l != null).SelectMany(l => l).OrderBy(w => w.PartOfSpeech).ToHashSet();
 
             return listOfWords;
         }

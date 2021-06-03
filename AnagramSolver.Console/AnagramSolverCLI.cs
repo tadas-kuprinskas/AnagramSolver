@@ -23,7 +23,7 @@ namespace AnagramSolver.Console
         {
             try
             {
-                var myWord = _consoleWriter.ReadLine("Please enter your word");
+                var myWord = _consoleWriter.ReadLine("\nPlease enter your word:");
                 var anagrams = _anagramSolverService.GetUniqueAnagrams(myWord);
 
                 _consoleWriter.PrintAnagrams(anagrams, myWord);

@@ -51,11 +51,8 @@ namespace AnagramSolver.Database
         {
             if (anagrams.ContainsKey(orderedWord))
             {
-                //if (!anagrams[orderedWord].Exists(w => w.Value.ToLower() == word.ToLower()))
-                //{
                     anagrams[orderedWord].Add(
-                    Mapping.MapToWord(orderedWord, word, partOfSpeech));
-                //}                       
+                    Mapping.MapToWord(orderedWord, word, partOfSpeech));                     
             }
             else
             {
