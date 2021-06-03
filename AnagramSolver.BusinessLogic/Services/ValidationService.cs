@@ -28,13 +28,5 @@ namespace AnagramSolver.BusinessLogic.Services
                 throw new ArgumentException($"Input cannot be shorter than {_wordHandlingOptions.MinInputLength} letters");
             }
         }
-
-        public void ValidateSingleWordAnagrams(IEnumerable<Word> words, string myWord)
-        {
-            if (words == null)
-            {
-                throw new ArgumentException($"There are no anagrams for your word \"{myWord}\"");
-            }
-        }
     }
 }

@@ -13,11 +13,6 @@ namespace AnagramSolver.Contracts.Models
         public string PartOfSpeech { get; set; }
         public string OrderedValue { get; set; }
 
-        public override string ToString()
-        {
-            return Value;
-        }
-
         public override bool Equals(object obj)
         {
             return this.Value.Equals(((Word)obj).Value);
@@ -29,16 +24,16 @@ namespace AnagramSolver.Contracts.Models
         }
     }
 
-    public class WordComparer : IEqualityComparer<Word>
-    {
-        public bool Equals(Word x, Word y)
-        {
-            return x.Value.Trim().ToLower().Equals(y.Value.Trim().ToLower());
-        }
+    //public class WordComparer : IEqualityComparer<Word>
+    //{
+    //    public bool Equals(Word x, Word y)
+    //    {
+    //        return x.Value.Trim().ToLower().Equals(y.Value);
+    //    }
 
-        public int GetHashCode(Word obj)
-        {
-            return obj.Value.GetHashCode();
-        }
-    }
+    //    public int GetHashCode(Word obj)
+    //    {
+    //        return obj.Value.GetHashCode();
+    //    }
+    //}
 }
