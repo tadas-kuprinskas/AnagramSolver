@@ -18,84 +18,24 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
     [TestFixture]
     public class AnagramSolverServiceTests
     {
-        [TestCase("adeisv")]
-        public void FindSingleWordAnagrams_GivenSameValueWords_ReturnsUniqueAnagrams(string orderedWord)
+        private HashSet<Word> _words;
+        private Dictionary<string, HashSet<Word>> _dictionary;
+        private AnagramSolverService _anagramSolverService;
+        private Mock<IWordRepository> _mockWordRepository;
+
+        [SetUp]
+        public void Setup()
         {
-            Word firstWord = new()
-            {
-                Value = "dievas",
-                OrderedValue = orderedWord,
-                PartOfSpeech = "dkt"
-            };
-
-            Word secondWord = new()
-            {
-                Value = "dievas",
-                OrderedValue = orderedWord,
-                PartOfSpeech = "dkt"
-            };
-
-            Word thirdWord = new()
-            {
-                Value = "vedasi",
-                OrderedValue = orderedWord,
-                PartOfSpeech = "vksm"
-            };
-
-            Word fourthWord = new()
-            {
-                Value = "vedasi",
-                OrderedValue = orderedWord,
-                PartOfSpeech = "vksm"
-            };
-
-            HashSet<Word> words = new() { firstWord, secondWord, thirdWord, fourthWord };
-
-            Dictionary<string, HashSet<Word>> dictionary = new();
-            dictionary.Add(orderedWord, words);
-
-            var mockWordRepository = new Mock<IWordRepository>();
-            mockWordRepository.Setup(w => w.ReadAndGetDictionary()).Returns(dictionary);
-
-            var mockValidationService = new Mock<IValidationService>();
-
-            WordHandlingOptions wordHandlingOptions = new() { NumberOfAnagrams = 10 };
-            var mockOptions = new Mock<IOptions<WordHandlingOptions>>();
-
-            mockOptions.Setup(ap => ap.Value).Returns(wordHandlingOptions);
-
-            var anagramSolverService = new AnagramSolverService(mockWordRepository.Object, mockValidationService.Object, mockOptions.Object);
-
-            var anagrams = anagramSolverService.FindSingleWordAnagrams(orderedWord);
-
-            anagrams.Count().ShouldBe(2);
-        }
-
-        [TestCase("veidas")]
-        public void GetUniqueAnagrams_GivenSingleInput_ReturnsUniqueAnagrams(string singleWord)
-        {
-            var fixture = new Fixture();
             var orderedWord = "adeisv";
+            _words = GetWords();
 
-            fixture.Customize<Word>(w => w.With(p => p.Value, "dievas").With(p => p.OrderedValue, orderedWord));            
-            var firstWord = fixture.Create<Word>();
+            _dictionary = new Dictionary<string, HashSet<Word>>
+            {
+                { orderedWord, _words }
+            };
 
-            fixture.Customize<Word>(w => w.With(p => p.Value, "vedasi").With(p => p.OrderedValue, orderedWord));
-            var secondWord = fixture.Create<Word>();
-
-            fixture.Customize<Word>(w => w.With(p => p.Value, "vedasi").With(p => p.OrderedValue, orderedWord));
-            var thirdWord = fixture.Create<Word>();
-
-            fixture.Customize<Word>(w => w.With(p => p.Value, "dievas").With(p => p.OrderedValue, orderedWord));
-            var fourthWord = fixture.Create<Word>();
-
-            HashSet<Word> words = new() { firstWord, secondWord, thirdWord, fourthWord };
-
-            Dictionary<string, HashSet<Word>> dictionary = new();
-            dictionary.Add(orderedWord, words);
-
-            var mockWordRepository = new Mock<IWordRepository>();
-            mockWordRepository.Setup(w => w.ReadAndGetDictionary()).Returns(dictionary);
+            _mockWordRepository = new Mock<IWordRepository>();
+            _mockWordRepository.Setup(w => w.ReadAndGetDictionary()).Returns(_dictionary);
 
             var mockValidationService = new Mock<IValidationService>();
 
@@ -104,19 +44,15 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
 
             mockOptions.Setup(ap => ap.Value).Returns(wordHandlingOptions);
 
-            var anagramSolverService = new AnagramSolverService(mockWordRepository.Object, mockValidationService.Object, mockOptions.Object);
-
-            var uniqueAnagrams = anagramSolverService.GetUniqueAnagrams(singleWord);
-
-            uniqueAnagrams.Count().ShouldBe(2);
+            _anagramSolverService = new(_mockWordRepository.Object, mockValidationService.Object, mockOptions.Object);
         }
 
-        [TestCase("geras veidas")]
-        public void GetUniqueAnagrams_GivenMultipleWordInput_ReturnsUniqueAnagrams(string multipleWord)
+        private static HashSet<Word> GetWords()
         {
-            var fixture = new Fixture();
             var orderedWord = "adeisv";
             var orderedSecondWord = "aegrs";
+
+            var fixture = new Fixture();
 
             fixture.Customize<Word>(w => w.With(p => p.Value, "dievas").With(p => p.OrderedValue, orderedWord));
             var firstWord = fixture.Create<Word>();
@@ -141,25 +77,53 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
 
             HashSet<Word> words = new() { firstWord, secondWord, thirdWord, fourthWord, fifthWord, sixthWord, seventhWord };
 
-            Dictionary<string, HashSet<Word>> dictionary = new();
-            dictionary.Add(orderedWord, words);
-            dictionary.Add(orderedSecondWord, words);
+            return words;
+        }
 
-            var mockWordRepository = new Mock<IWordRepository>();
-            mockWordRepository.Setup(w => w.ReadAndGetDictionary()).Returns(dictionary);
+        [TestCase("adeisv")]
+        public void FindSingleWordAnagrams_GivenSameValueWords_ReturnsFourUniqueAnagrams(string orderedWord)
+        {
+            var anagrams = _anagramSolverService.FindSingleWordAnagrams(orderedWord);
 
-            var mockValidationService = new Mock<IValidationService>();
+            anagrams.Count().ShouldBe(4);
+        }
 
-            WordHandlingOptions wordHandlingOptions = new() { NumberOfAnagrams = 10 };
-            var mockOptions = new Mock<IOptions<WordHandlingOptions>>();
+        [TestCase("veidas")]
+        public void GetUniqueAnagrams_GivenSingleInput_ReturnsFourUniqueAnagramsOfWord(string singleWord)
+        {
+            var uniqueAnagrams = _anagramSolverService.GetUniqueAnagrams(singleWord);
 
-            mockOptions.Setup(ap => ap.Value).Returns(wordHandlingOptions);
-
-            var anagramSolverService = new AnagramSolverService(mockWordRepository.Object, mockValidationService.Object, mockOptions.Object);
-
-            var uniqueAnagrams = anagramSolverService.GetUniqueAnagrams(multipleWord);
-
+            uniqueAnagrams.ShouldBeUnique();
             uniqueAnagrams.Count().ShouldBe(4);
+        }
+
+        [TestCase("geras veidas visma")]
+        public void GetUniqueAnagrams_GivenMultipleWordInput_ReturnsSixUniqueAnagrams(string multipleWord)
+        {
+            var orderedSecondWord = "aimsv";
+
+            Fixture fixture = new();
+
+            fixture.Customize<Word>(w => w.With(p => p.Value, "savim").With(p => p.OrderedValue, orderedSecondWord));
+            var firstWord = fixture.Create<Word>();
+
+            fixture.Customize<Word>(w => w.With(p => p.Value, "visam").With(p => p.OrderedValue, orderedSecondWord));
+            var secondWord = fixture.Create<Word>();
+
+            fixture.Customize<Word>(w => w.With(p => p.Value, "visam").With(p => p.OrderedValue, orderedSecondWord));
+            var thirdWord = fixture.Create<Word>();
+
+            HashSet<Word> _words = new() { firstWord, secondWord, thirdWord };
+
+            _dictionary.Add(orderedSecondWord, _words);
+
+            _mockWordRepository = new Mock<IWordRepository>();
+            _mockWordRepository.Setup(w => w.ReadAndGetDictionary()).Returns(_dictionary);
+
+            var uniqueAnagrams = _anagramSolverService.GetUniqueAnagrams(multipleWord);
+
+            uniqueAnagrams.ShouldBeUnique();
+            uniqueAnagrams.Count().ShouldBe(6);
         }
     }
 }
