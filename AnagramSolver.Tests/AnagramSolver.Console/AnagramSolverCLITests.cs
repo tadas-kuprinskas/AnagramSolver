@@ -6,6 +6,7 @@ using AnagramSolver.Contracts.Models;
 using AutoFixture;
 using Moq;
 using NUnit.Framework;
+using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,15 +45,52 @@ namespace AnagramSolver.Tests.AnagramSolver.Console
         [Test]
         public void ReadAndExecute_GivenValidWord_ThrowsNoException()
         {
+            var words = GetWords();
             Mock<IWriter> _consoleWriter = new();
             _consoleWriter.Setup(m => m.ReadLine("\nPlease enter your word:")).Returns("sula");
 
             Mock<IAnagramSolverService> _anagramSolverService = new();
+            _anagramSolverService.Setup(m => m.GetUniqueAnagrams("sula")).Returns(words);
 
             AnagramSolverCLI _anagramSolverCLI = new(_anagramSolverService.Object, _consoleWriter.Object);
-            _anagramSolverService.Setup(m => m.GetUniqueAnagrams("sula")).Returns(GetWords());
 
             Assert.DoesNotThrow(() => _anagramSolverCLI.ReadAndExecute());
+        }
+
+        [Test]
+        public void ReadAndExecute_GivenEmptyIEnumerable_VerifiesThatMethodWasPerformed()
+        {
+            var myWord = "sula";
+            Mock<IWriter> _consoleWriter = new();
+            _consoleWriter.Setup(m => m.ReadLine("\nPlease enter your word:")).Returns(myWord);
+
+            Mock<IAnagramSolverService> _anagramSolverService = new();
+            _anagramSolverService.Setup(m => m.GetUniqueAnagrams(myWord)).Returns(Enumerable.Empty<Word>);
+
+            AnagramSolverCLI _anagramSolverCLI = new(_anagramSolverService.Object, _consoleWriter.Object);
+
+            _anagramSolverCLI.ReadAndExecute();
+
+            _consoleWriter.Verify(m => m.PrintLine($"Your word \"{myWord}\" has no anagrams"));
+        }
+
+        [Test]
+        public void ReadAndExecute_GivenValidIEnumerable_VerifiesThatCorrectMethodWasPerformed()
+        {
+            var myWord = "veidas";
+            var words = GetWords();
+
+            Mock<IWriter> _consoleWriter = new();
+            _consoleWriter.Setup(m => m.ReadLine("\nPlease enter your word:")).Returns(myWord);
+
+            Mock<IAnagramSolverService> _anagramSolverService = new();
+            _anagramSolverService.Setup(m => m.GetUniqueAnagrams(myWord)).Returns(words);
+
+            AnagramSolverCLI _anagramSolverCLI = new(_anagramSolverService.Object, _consoleWriter.Object);
+
+            _anagramSolverCLI.ReadAndExecute();
+
+            _consoleWriter.Verify(m => m.PrintAnagrams(words, myWord));
         }
     }
 }

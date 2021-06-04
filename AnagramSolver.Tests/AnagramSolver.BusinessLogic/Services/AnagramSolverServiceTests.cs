@@ -98,7 +98,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
         }
 
         [TestCase("geras veidas visma")]
-        public void GetUniqueAnagrams_GivenMultipleWordInput_ReturnsSixUniqueAnagrams(string multipleWord)
+        public void FindMultipleWordsAnagrams_GivenMultipleWordInput_ReturnsSixUniqueAnagrams(string multipleWord)
         {
             var orderedSecondWord = "aimsv";
 
@@ -120,9 +120,10 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             _mockWordRepository = new Mock<IWordRepository>();
             _mockWordRepository.Setup(w => w.ReadAndGetDictionary()).Returns(_dictionary);
 
-            var uniqueAnagrams = _anagramSolverService.GetUniqueAnagrams(multipleWord);
+            var uniqueAnagrams = _anagramSolverService.FindMultipleWordsAnagrams(multipleWord);
 
             uniqueAnagrams.ShouldBeUnique();
+            uniqueAnagrams.ShouldBeOfType<HashSet<Word>>();
             uniqueAnagrams.Count().ShouldBe(6);
         }
     }

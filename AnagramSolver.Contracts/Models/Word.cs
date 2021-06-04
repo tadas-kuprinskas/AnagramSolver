@@ -23,17 +23,4 @@ namespace AnagramSolver.Contracts.Models
             return this.Value.GetHashCode();
         }
     }
-
-    //public class WordComparer : IEqualityComparer<Word>
-    //{
-    //    public bool Equals(Word x, Word y)
-    //    {
-    //        return x.Value.Trim().ToLower().Equals(y.Value);
-    //    }
-
-    //    public int GetHashCode(Word obj)
-    //    {
-    //        return obj.Value.GetHashCode();
-    //    }
-    //}
 }

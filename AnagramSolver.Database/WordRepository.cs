@@ -46,7 +46,7 @@ namespace AnagramSolver.Database
             return dictionary;
         }
 
-        private static void AddWordToDictionary(Dictionary<string, HashSet<Word>> anagrams, string orderedWord, string word, 
+        public void AddWordToDictionary(Dictionary<string, HashSet<Word>> anagrams, string orderedWord, string word, 
             string partOfSpeech)
         {
             if (anagrams.ContainsKey(orderedWord))
