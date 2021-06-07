@@ -17,15 +17,15 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
     [TestFixture]
     public class ValidationServiceTests
     {
-        private global::AnagramSolver.BusinessLogic.Utilities.Settings _wordHandlingOptions;
+        private Settings _handlingOptions;
         private ValidationService _validationService;
 
         [SetUp]
         public void Setup()
         {
-            _wordHandlingOptions = new() { MinInputLength = 3 };
-            var mockOptions = new Mock<IOptions<global::AnagramSolver.BusinessLogic.Utilities.Settings>>();
-            mockOptions.Setup(ap => ap.Value).Returns(_wordHandlingOptions);
+            _handlingOptions = new() { MinInputLength = 3 };
+            var mockOptions = new Mock<IOptions<Settings>>();
+            mockOptions.Setup(ap => ap.Value).Returns(_handlingOptions);
 
             _validationService = new(mockOptions.Object);
         }
@@ -41,7 +41,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
         [TestCase("ir")]
         public void ValidateInputLength_GivenInvalidLengthInputs_ThrowsArgumentExceptionWithCorrectMessage(string myWord)
         {
-            Assert.Throws<ArgumentException>(() => _validationService.ValidateInputLength(myWord)).Message.ShouldBe($"Input cannot be shorter than {_wordHandlingOptions.MinInputLength} letters");
+            Assert.Throws<ArgumentException>(() => _validationService.ValidateInputLength(myWord)).Message.ShouldBe($"Input cannot be shorter than {_handlingOptions.MinInputLength} letters");
         }
     }
 }

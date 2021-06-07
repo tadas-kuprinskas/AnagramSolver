@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AnagramSolver.BusinessLogic\AnagramSolver.BusinessLogic.csproj" />
     <ProjectReference Include="..\AnagramSolver.Console\AnagramSolver.Console.csproj" />
+    <ProjectReference Include="..\AnagramSolver.WebApi\AnagramSolver.WebApi.csproj" />
   </ItemGroup>
 
 </Project>

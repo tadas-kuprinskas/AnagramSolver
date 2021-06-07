@@ -20,7 +20,7 @@ namespace AnagramSolver.WebApi.Controllers
 
         [HttpGet]
         [Route("Zodynas")]
-        public FileResult DownloadDictionary()
+        public FileContentResult DownloadDictionary()
         {
             var solutionPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
 
