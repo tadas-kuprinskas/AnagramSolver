@@ -7,6 +7,6 @@ namespace AnagramSolver.Contracts.Interfaces
     public interface IApiWordService
     {
         IEnumerable<Word> GetPaginatedWords(int currentPage, int pageSize);
-        Task<IEnumerable<Word>> SendGetAnagramsRequest(string myWord);
+        Task<IEnumerable<string>> SendGetAnagramsRequest(string myWord);
     }
 }

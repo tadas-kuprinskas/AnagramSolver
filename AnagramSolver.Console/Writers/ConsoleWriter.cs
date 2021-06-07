@@ -33,5 +33,13 @@ namespace AnagramSolver.Console.Writers
                 System.Console.Write($"{anagram.Value} ");             
             }
         }
+
+        public void PrintAnagrams(IEnumerable<string> anagrams, string myWord)
+        {
+            foreach (var anagram in anagrams)
+            {
+                System.Console.Write($"{anagram} ");
+            }
+        }
     }
 }

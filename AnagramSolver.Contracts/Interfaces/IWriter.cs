@@ -9,5 +9,6 @@ namespace AnagramSolver.Contracts.Interfaces
         void PrintLine(string input);
         string ReadLine(string message);
         void PrintAnagrams(IEnumerable<Word> anagrams, string myWord);
+        void PrintAnagrams(IEnumerable<string> anagrams, string myWord);
     }
 }

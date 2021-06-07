@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,17 +37,18 @@ namespace AnagramSolver.BusinessLogic.Services
             return items;
         }
 
-        public async Task<IEnumerable<Word>> SendGetAnagramsRequest(string myWord)
+        public async Task<IEnumerable<string>> SendGetAnagramsRequest(string myWord)
         {
             HttpClient client = new();
+
             var httpResponse = await client.GetAsync(wordUri + myWord);
 
-            var anagrams = new List<Word>();
+            var anagrams = new List<string>();
 
             if (httpResponse.IsSuccessStatusCode)
             {
                 var contentString = await httpResponse.Content.ReadAsStringAsync();
-                anagrams = JsonConvert.DeserializeObject<List<Word>>(contentString);
+                anagrams = JsonConvert.DeserializeObject<List<string>>(contentString);
             }
             return anagrams;
         }
