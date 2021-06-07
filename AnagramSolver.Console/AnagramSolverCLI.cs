@@ -1,5 +1,4 @@
-﻿using AnagramSolver.BusinessLogic.Services;
-using AnagramSolver.Contracts.Interfaces;
+﻿using AnagramSolver.Contracts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +11,13 @@ namespace AnagramSolver.Console
     {
         private readonly IAnagramSolverService _anagramSolverService;
         private readonly IWriter _consoleWriter;
+        private readonly IApiWordService _apiWordService;
 
-        public AnagramSolverCLI(IAnagramSolverService anagramSolverService, IWriter consoleWriter)
+        public AnagramSolverCLI(IAnagramSolverService anagramSolverService, IWriter consoleWriter, IApiWordService apiWordService)
         {
             _anagramSolverService = anagramSolverService;
             _consoleWriter = consoleWriter;
+            _apiWordService = apiWordService;
         }
 
         public void ReadAndExecute()
@@ -34,6 +35,28 @@ namespace AnagramSolver.Console
                 {
                     _consoleWriter.PrintAnagrams(anagrams, myWord);
                 }    
+            }
+            catch (ArgumentException ex)
+            {
+                _consoleWriter.PrintLine(ex.Message);
+            }
+        }
+
+        public void SendRequestAndExecute()
+        {
+            try
+            {
+                var myWord = _consoleWriter.ReadLine("\nPlease enter your word:");
+                var anagrams = _apiWordService.SendGetAnagramsRequest(myWord).Result;
+
+                if (!anagrams.Any())
+                {
+                    _consoleWriter.PrintLine($"Your word \"{myWord}\" has no anagrams");
+                }
+                else
+                {
+                    _consoleWriter.PrintAnagrams(anagrams, myWord);
+                }
             }
             catch (ArgumentException ex)
             {

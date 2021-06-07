@@ -14,18 +14,18 @@ namespace AnagramSolver.BusinessLogic.Services
 {
     public class ValidationService : IValidationService
     {
-        private readonly WordHandlingOptions _wordHandlingOptions;
+        private readonly Utilities.Settings _options;
 
-        public ValidationService(IOptions<WordHandlingOptions> wordHandlingOptions)
+        public ValidationService(IOptions<Utilities.Settings> wordHandlingOptions)
         {
-            _wordHandlingOptions = wordHandlingOptions.Value;
+            _options = wordHandlingOptions.Value;
         }
 
         public void ValidateInputLength(string myWord)
         {
-            if (myWord.Length < _wordHandlingOptions.MinInputLength)
+            if (myWord.Length < _options.MinInputLength)
             {
-                throw new ArgumentException($"Input cannot be shorter than {_wordHandlingOptions.MinInputLength} letters");
+                throw new ArgumentException($"Input cannot be shorter than {_options.MinInputLength} letters");
             }
         }
     }

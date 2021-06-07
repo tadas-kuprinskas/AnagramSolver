@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace AnagramSolver.BusinessLogic.Utilities
 {
-    public class WordHandlingOptions
+    public class Settings
     {
-        public const string WordHandling = "WordHandling";
+        public const string HandlingOptions = "HandlingOptions";
         public int MinInputLength { get; set; }
-        public int NumberOfAnagrams { get; set; }   
+        public int NumberOfAnagrams { get; set; }
+        public string FilePath { get; set; }
     }
 }

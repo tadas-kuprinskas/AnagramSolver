@@ -18,7 +18,7 @@ namespace AnagramSolver
 
             while (true)
             {
-                anagramSolverCli.ReadAndExecute();
+                anagramSolverCli.SendRequestAndExecute();
             }
         }
     }

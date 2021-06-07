@@ -16,13 +16,13 @@ namespace AnagramSolver.BusinessLogic.Services
     {
         private readonly IWordRepository _wordRepository;
         private readonly IValidationService _validationService;
-        private readonly WordHandlingOptions _wordHandlingOptions;
+        private readonly Utilities.Settings _options;
 
-        public AnagramSolverService(IWordRepository wordRepository, IValidationService validationService, IOptions<WordHandlingOptions> wordHandlingOptions)
+        public AnagramSolverService(IWordRepository wordRepository, IValidationService validationService, IOptions<Utilities.Settings> wordHandlingOptions)
         {
             _wordRepository = wordRepository;
             _validationService = validationService;
-            _wordHandlingOptions = wordHandlingOptions.Value;
+            _options = wordHandlingOptions.Value;
         }
 
         public IEnumerable<Word> GetUniqueAnagrams(string myWord)
@@ -41,7 +41,7 @@ namespace AnagramSolver.BusinessLogic.Services
 
             if (anagrams.ContainsKey(orderedWord))
             {
-                return anagrams[orderedWord].Take(_wordHandlingOptions.NumberOfAnagrams);
+                return anagrams[orderedWord].Take(_options.NumberOfAnagrams);
             }
             return Enumerable.Empty<Word>();
         }

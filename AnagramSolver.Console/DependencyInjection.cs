@@ -19,19 +19,25 @@ namespace AnagramSolver.Console
     {
         public static void ConfigureServices(IServiceCollection services)
         {
+            var solutionPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
+
+            int index = solutionPath.IndexOf("\\AnagramSolver");
+            solutionPath = solutionPath.Substring(0, index);
+
             var configuration = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), @"../../../AnagramSolver.Console"))
+            .SetBasePath(Path.Combine(solutionPath, "AnagramSolver/AnagramSolver.Console"))
             .AddJsonFile("appsettings.json", optional: false)
             .Build();
 
-            services.Configure<WordHandlingOptions>(configuration.GetSection(
-                                        WordHandlingOptions.WordHandling));
+            services.Configure<Settings>(configuration.GetSection(
+                                        Settings.HandlingOptions));
 
-            services.AddSingleton<AnagramSolverCLI>()
-                    .AddSingleton<IAnagramSolverService, AnagramSolverService>()
-                    .AddSingleton<IWordRepository, WordRepository>()
-                    .AddSingleton<IValidationService, ValidationService>()
-                    .AddSingleton<IWriter, ConsoleWriter>();
+            services.AddScoped<AnagramSolverCLI>()
+                    .AddScoped<IAnagramSolverService, AnagramSolverService>()
+                    .AddScoped<IWordRepository, WordRepository>()
+                    .AddScoped<IValidationService, ValidationService>()
+                    .AddScoped<IWriter, ConsoleWriter>()
+                    .AddScoped<IApiWordService, ApiWordService>();
         }
     }
 }

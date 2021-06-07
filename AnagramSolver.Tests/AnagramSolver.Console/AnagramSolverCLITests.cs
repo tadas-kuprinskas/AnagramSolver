@@ -1,5 +1,4 @@
-﻿using AnagramSolver.BusinessLogic.Services;
-using AnagramSolver.Console;
+﻿using AnagramSolver.Console;
 using AnagramSolver.Console.Writers;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
@@ -22,17 +21,19 @@ namespace AnagramSolver.Tests.AnagramSolver.Console
         private AnagramSolverCLI _anagramSolverCLI;
         private Mock<IAnagramSolverService> _anagramSolverService;
         private Mock<IWriter> _consoleWriter;
+        private Mock<IApiWordService> _apiWordService;
 
         [SetUp]
         public void Setup()
         {
             _words = GetWords();
 
+            _apiWordService = new();
             _anagramSolverService = new();
             _consoleWriter = new();
             _consoleWriter.Setup(m => m.ReadLine("\nPlease enter your word:")).Returns("sula");
 
-            _anagramSolverCLI = new(_anagramSolverService.Object, _consoleWriter.Object);
+            _anagramSolverCLI = new(_anagramSolverService.Object, _consoleWriter.Object, _apiWordService.Object);
         }
 
         private static HashSet<Word> GetWords()

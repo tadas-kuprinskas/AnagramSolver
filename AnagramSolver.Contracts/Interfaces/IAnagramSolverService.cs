@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace AnagramSolver.BusinessLogic.Services
+namespace AnagramSolver.Contracts.Interfaces
 {
     public interface IAnagramSolverService
     {

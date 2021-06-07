@@ -1,20 +1,36 @@
 ﻿using AnagramSolver.BusinessLogic.StaticHelpers;
+using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace AnagramSolver.Database
 {
     public class WordRepository : IWordRepository
     {
-        private readonly string path = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), @"../../../AnagramSolver.Contracts/Data/zodynas.txt");
+        private readonly BusinessLogic.Utilities.Settings _options;
+
+        public WordRepository(IOptions<Settings> options)
+        {
+            _options = options.Value;
+        }
 
         public Dictionary<string, HashSet<Word>> ReadAndGetDictionary()
         {
+            var solutionPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
+
+            int index = solutionPath.IndexOf("\\AnagramSolver");
+            solutionPath = solutionPath.Substring(0, index);
+
+            var path = Path.Combine(solutionPath, "AnagramSolver", _options.FilePath);
+
             Dictionary<string, HashSet<Word>> dictionary = new();
 
             using FileStream fileStream = File.Open(path, FileMode.Open);
@@ -46,7 +62,7 @@ namespace AnagramSolver.Database
             return dictionary;
         }
 
-        public void AddWordToDictionary(Dictionary<string, HashSet<Word>> anagrams, string orderedWord, string word, 
+        public static void AddWordToDictionary(Dictionary<string, HashSet<Word>> anagrams, string orderedWord, string word, 
             string partOfSpeech)
         {
             if (anagrams.ContainsKey(orderedWord))

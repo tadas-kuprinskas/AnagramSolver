@@ -17,14 +17,14 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
     [TestFixture]
     public class ValidationServiceTests
     {
-        private WordHandlingOptions _wordHandlingOptions;
+        private global::AnagramSolver.BusinessLogic.Utilities.Settings _wordHandlingOptions;
         private ValidationService _validationService;
 
         [SetUp]
         public void Setup()
         {
             _wordHandlingOptions = new() { MinInputLength = 3 };
-            var mockOptions = new Mock<IOptions<WordHandlingOptions>>();
+            var mockOptions = new Mock<IOptions<global::AnagramSolver.BusinessLogic.Utilities.Settings>>();
             mockOptions.Setup(ap => ap.Value).Returns(_wordHandlingOptions);
 
             _validationService = new(mockOptions.Object);
