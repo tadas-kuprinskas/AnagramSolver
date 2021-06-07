@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,6 @@ namespace AnagramSolver.Tests.AnagramSolver.Console
         private HashSet<Word> _words;
         private AnagramSolverCLI _anagramSolverCLI;
         private Mock<IAnagramSolverService> _anagramSolverService;
-        private Mock<IWriter> _consoleWriter;
         private Mock<IApiWordService> _apiWordService;
 
         [SetUp]
@@ -30,10 +30,14 @@ namespace AnagramSolver.Tests.AnagramSolver.Console
 
             _apiWordService = new();
             _anagramSolverService = new();
-            _consoleWriter = new();
-            _consoleWriter.Setup(m => m.ReadLine("\nPlease enter your word:")).Returns("sula");
 
-            _anagramSolverCLI = new(_anagramSolverService.Object, _consoleWriter.Object, _apiWordService.Object);
+            var output = new StringWriter();
+            System.Console.SetOut(output);
+
+            var input = new StringReader("sula");
+            System.Console.SetIn(input);
+
+            _anagramSolverCLI = new(_anagramSolverService.Object, _apiWordService.Object);
         }
 
         private static HashSet<Word> GetWords()
@@ -69,27 +73,28 @@ namespace AnagramSolver.Tests.AnagramSolver.Console
         }
 
         [Test]
-        public void ReadAndExecute_GivenEmptyIEnumerable_VerifiesThatMethodWasPerformed()
+        public void ReadAndExecute_GivenEmptyIEnumerable_ThrowsNoException()
         {
-            _anagramSolverService.Setup(m => m.GetUniqueAnagrams("sula")).Returns(Enumerable.Empty<Word>);
+            var myWord = "sula";
+            _anagramSolverService.Setup(m => m.GetUniqueAnagrams(myWord)).Returns(Enumerable.Empty<Word>);
 
-            _anagramSolverCLI.ReadAndExecute();
-
-            _consoleWriter.Verify(m => m.PrintLine($"Your word \"sula\" has no anagrams"), Times.Once());
+            Assert.DoesNotThrow(() => _anagramSolverCLI.ReadAndExecute());
         }
 
         [Test]
-        public void ReadAndExecute_GivenValidIEnumerable_VerifiesThatCorrectMethodWasPerformed()
+        public void ReadAndExecute_GivenValidIEnumerable_ThrowsNoException()
         {
             var myWord = "veidas";
 
-            _consoleWriter.Setup(m => m.ReadLine("\nPlease enter your word:")).Returns(myWord);
+            var output = new StringWriter();
+            System.Console.SetOut(output);
+
+            var input = new StringReader(myWord);
+            System.Console.SetIn(input);
 
             _anagramSolverService.Setup(m => m.GetUniqueAnagrams(myWord)).Returns(_words);
 
-            _anagramSolverCLI.ReadAndExecute();
-
-            _consoleWriter.Verify(m => m.PrintAnagrams(_words, myWord), Times.Once());
+            Assert.DoesNotThrow(() => _anagramSolverCLI.ReadAndExecute());
         }
     }
 }

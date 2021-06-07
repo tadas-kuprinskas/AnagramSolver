@@ -1,4 +1,7 @@
-﻿using AnagramSolver.Console;
+﻿using AnagramSolver.BusinessLogic.Services;
+using AnagramSolver.Console;
+using AnagramSolver.Contracts.Interfaces;
+using AnagramSolver.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -10,11 +13,14 @@ namespace AnagramSolver
         static void Main(string[] args)
         {
             var services = new ServiceCollection();
-            DependencyInjection.ConfigureServices(services);
+            AnagramSolver.DependencyInjection.DependencyInjection.ConfigureServices(services);
 
             var serviceProvider = services.BuildServiceProvider();
 
-            var anagramSolverCli = serviceProvider.GetService<AnagramSolverCLI>();
+            var anagramSolverService = serviceProvider.GetService<IAnagramSolverService>();
+            var apiWordService = serviceProvider.GetService<IApiWordService>();
+
+            var anagramSolverCli = new AnagramSolverCLI(anagramSolverService, apiWordService);
 
             while (true)
             {

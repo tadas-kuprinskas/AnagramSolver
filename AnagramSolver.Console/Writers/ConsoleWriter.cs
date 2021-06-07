@@ -10,7 +10,7 @@ namespace AnagramSolver.Console.Writers
 {
     public class ConsoleWriter : IWriter
     {
-        public void PrintLine(string input)
+        public virtual void PrintLine(string input)
         {
             System.Console.WriteLine(input);
         }
@@ -20,13 +20,13 @@ namespace AnagramSolver.Console.Writers
             System.Console.WriteLine();
         }
 
-        public string ReadLine(string message)
+        public virtual string ReadLine(string message)
         {
             PrintLine(message);
             return System.Console.ReadLine();
         }
 
-        public void PrintAnagrams(IEnumerable<Word> anagrams, string myWord)
+        public virtual void PrintAnagrams(IEnumerable<Word> anagrams, string myWord)
         {
             foreach (var anagram in anagrams)
             {

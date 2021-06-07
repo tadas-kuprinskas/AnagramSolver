@@ -1,4 +1,5 @@
-﻿using AnagramSolver.Contracts.Interfaces;
+﻿using AnagramSolver.Console.Writers;
+using AnagramSolver.Contracts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,11 @@ namespace AnagramSolver.Console
         private readonly IWriter _consoleWriter;
         private readonly IApiWordService _apiWordService;
 
-        public AnagramSolverCLI(IAnagramSolverService anagramSolverService, IWriter consoleWriter, IApiWordService apiWordService)
+        public AnagramSolverCLI(IAnagramSolverService anagramSolverService, IApiWordService apiWordService)
         {
             _anagramSolverService = anagramSolverService;
-            _consoleWriter = consoleWriter;
             _apiWordService = apiWordService;
+            _consoleWriter = new ConsoleWriter();
         }
 
         public void ReadAndExecute()

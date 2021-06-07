@@ -1,19 +1,15 @@
 ﻿using AnagramSolver.BusinessLogic.Services;
 using AnagramSolver.BusinessLogic.Utilities;
-using AnagramSolver.Console.Writers;
+//using AnagramSolver.Console;
+//using AnagramSolver.Console.Writers;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Database;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AnagramSolver.Console
+namespace AnagramSolver.DependencyInjection
 {
     public static class DependencyInjection
     {
@@ -32,11 +28,9 @@ namespace AnagramSolver.Console
             services.Configure<Settings>(configuration.GetSection(
                                         Settings.HandlingOptions));
 
-            services.AddScoped<AnagramSolverCLI>()
-                    .AddScoped<IAnagramSolverService, AnagramSolverService>()
+            services.AddScoped<IAnagramSolverService, AnagramSolverService>()
                     .AddScoped<IWordRepository, WordRepository>()
                     .AddScoped<IValidationService, ValidationService>()
-                    .AddScoped<IWriter, ConsoleWriter>()
                     .AddScoped<IApiWordService, ApiWordService>();
         }
     }
