@@ -5,13 +5,16 @@ using AnagramSolver.Contracts.Models;
 using AutoFixture;
 using Microsoft.Extensions.Options;
 using Moq;
+using Moq.Protected;
 using NUnit.Framework;
 using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
@@ -30,6 +33,20 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             mockOptions.Setup(ap => ap.Value).Returns(_handlingOptions);
 
             var mockHttpClient = new Mock<IHttpClientFactory>();
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+            var fixture = new Fixture();
+
+            mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("[\"dievas\",\"Deivas\",\"vedasi\"]"),
+                });
+
+            var client = new HttpClient(mockHttpMessageHandler.Object);
+
+            mockHttpClient.Setup(_ => _.CreateClient(It.IsAny<string>())).Returns(client);
 
             var mockValidationService = new Mock<IValidationService>();
 

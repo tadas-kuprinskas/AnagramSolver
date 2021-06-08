@@ -123,7 +123,6 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             var uniqueAnagrams = _anagramSolverService.FindMultipleWordsAnagrams(multipleWord);
 
             uniqueAnagrams.ShouldBeUnique();
-            uniqueAnagrams.ShouldBeOfType<HashSet<Word>>();
             uniqueAnagrams.Count().ShouldBe(6);
         }
     }

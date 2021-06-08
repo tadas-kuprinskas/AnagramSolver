@@ -91,7 +91,7 @@ namespace AnagramSolver.Database
 
             if (!items.Any())
             {
-                throw new CustomException("The page is empty");
+                return Enumerable.Empty<string>();
             }
 
             return items;

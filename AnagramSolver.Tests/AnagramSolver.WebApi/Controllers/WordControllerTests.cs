@@ -42,7 +42,7 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
         {
             var result = _wordController.GetUniqueAnagrams(myWord);
 
-            Assert.IsInstanceOf<IActionResult>(result);
+            Assert.IsInstanceOf<IEnumerable<string>>(result);
         }
 
         [TestCase("sula")]
@@ -50,10 +50,7 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
         {
             var result = _wordController.GetUniqueAnagrams(myWord);
 
-            var okResult = result as OkObjectResult;
-
-            Assert.IsNotNull(okResult);
-            Assert.AreEqual(200, okResult.StatusCode);
+            result.ShouldNotBeNull();
         }
     }
 }

@@ -19,8 +19,7 @@ namespace AnagramSolver.WebApi.Controllers
             _options = options.Value;
         }
 
-        [HttpGet]
-        [Route("Dictionary")]
+        [HttpGet("Dictionary")]
         public FileContentResult DownloadDictionary()
         {
             var filePath = PathGetting.GetFilePath("AnagramSolver\\" + _options.FilePath);

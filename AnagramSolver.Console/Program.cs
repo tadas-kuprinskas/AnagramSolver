@@ -1,7 +1,10 @@
 ﻿using AnagramSolver.BusinessLogic.Services;
+using AnagramSolver.BusinessLogic.StaticHelpers;
+using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Console;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -13,6 +16,17 @@ namespace AnagramSolver
         static void Main(string[] args)
         {
             var services = new ServiceCollection();
+
+            var path = PathGetting.GetFilePath("AnagramSolver/AnagramSolver.Console");
+
+            var configuration = new ConfigurationBuilder()
+            .SetBasePath(path)
+            .AddJsonFile("appsettings.json", optional: false)
+            .Build();
+
+            services.Configure<Settings>(configuration.GetSection(
+                                        Settings.HandlingOptions));
+
             AnagramSolver.DependencyInjection.DependencyInjection.ConfigureServices(services);
 
             var serviceProvider = services.BuildServiceProvider();
