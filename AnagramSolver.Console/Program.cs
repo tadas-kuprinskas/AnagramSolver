@@ -17,15 +17,7 @@ namespace AnagramSolver
         {
             var services = new ServiceCollection();
 
-            var path = PathGetting.GetFilePath("AnagramSolver/AnagramSolver.Console");
-
-            var configuration = new ConfigurationBuilder()
-            .SetBasePath(path)
-            .AddJsonFile("appsettings.json", optional: false)
-            .Build();
-
-            services.Configure<Settings>(configuration.GetSection(
-                                        Settings.HandlingOptions));
+            ConfigureAppSettings(services);
 
             AnagramSolver.DependencyInjection.DependencyInjection.ConfigureServices(services);
 
@@ -40,6 +32,19 @@ namespace AnagramSolver
             {
                 anagramSolverCli.SendRequestAndExecute();
             }
+        }
+
+        private static void ConfigureAppSettings(ServiceCollection services)
+        {
+            var path = PathGetting.GetFilePath("AnagramSolver/AnagramSolver.Console");
+
+            var configuration = new ConfigurationBuilder()
+            .SetBasePath(path)
+            .AddJsonFile("appsettings.json", optional: false)
+            .Build();
+
+            services.Configure<Settings>(configuration.GetSection(
+                                        Settings.HandlingOptions));
         }
     }
 }

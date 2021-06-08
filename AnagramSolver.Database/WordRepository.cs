@@ -17,19 +17,19 @@ namespace AnagramSolver.Database
     public class WordRepository : IWordRepository
     {
         private readonly Settings _options;
+        private readonly string _path;
 
         public WordRepository(IOptions<Settings> options)
         {
             _options = options.Value;
+            _path = PathGetting.GetFilePath("AnagramSolver\\" + _options.FilePath);
         }
 
         public Dictionary<string, HashSet<Word>> ReadAndGetDictionary()
         {
-            var path = PathGetting.GetFilePath("AnagramSolver\\" + _options.FilePath);
-
             Dictionary<string, HashSet<Word>> dictionary = new();
 
-            using FileStream fileStream = File.Open(path, FileMode.Open);
+            using FileStream fileStream = File.Open(_path, FileMode.Open);
             using StreamReader sr = new(fileStream);
 
             string line;
@@ -78,9 +78,9 @@ namespace AnagramSolver.Database
         public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize)
         {
             var itemsNumber = 50;
-            var words = ReadAndGetDictionary().Values.SelectMany(w => w.Select(x => x.Value)).ToList();
+            var words = GetAllWords();
 
-            int count = words.Count;
+            int count = words.Count();
             itemsNumber = pageSize < 1 ? itemsNumber : pageSize;
 
             var totalPages = (int)Math.Ceiling(count / (double)itemsNumber);
@@ -93,8 +93,35 @@ namespace AnagramSolver.Database
             {
                 return Enumerable.Empty<string>();
             }
-
             return items;
+        }
+
+        private IEnumerable<string> GetAllWords()
+        {
+            List<string> words = new();
+
+            using FileStream fileStream = File.Open(_path, FileMode.Open);
+            using StreamReader sr = new(fileStream);
+
+            string line;
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                string[] values = line.Split("\t");
+
+                var firstWord = values[0];
+                var secondWord = values[2];
+
+                if(firstWord != null)
+                {
+                    words.Add(firstWord);
+                }
+                if (secondWord != null)
+                {
+                    words.Add(firstWord);
+                }
+            }
+            return words;
         }
     }
 }

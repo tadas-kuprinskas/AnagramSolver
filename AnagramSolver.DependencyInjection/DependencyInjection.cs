@@ -16,16 +16,6 @@ namespace AnagramSolver.DependencyInjection
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            //var path = PathGetting.GetFilePath("AnagramSolver/AnagramSolver.Console");
-
-            //var configuration = new ConfigurationBuilder()
-            //.SetBasePath(path)
-            //.AddJsonFile("appsettings.json", optional: false)
-            //.Build();
-
-            //services.Configure<Settings>(configuration.GetSection(
-            //                            Settings.HandlingOptions));
-
             services.AddScoped<IAnagramSolverService, AnagramSolverService>()
                     .AddScoped<IWordRepository, WordRepository>()
                     .AddScoped<IValidationService, ValidationService>()

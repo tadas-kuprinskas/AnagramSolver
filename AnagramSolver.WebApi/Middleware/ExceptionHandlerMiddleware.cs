@@ -38,6 +38,5 @@ namespace AnagramSolver.WebApi.Middleware
                 await response.WriteAsync(result);
             }
         }
-
     }
 }

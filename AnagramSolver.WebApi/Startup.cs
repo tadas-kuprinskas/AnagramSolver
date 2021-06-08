@@ -1,7 +1,6 @@
 using AnagramSolver.BusinessLogic.Services;
 using AnagramSolver.BusinessLogic.StaticHelpers;
 using AnagramSolver.BusinessLogic.Utilities;
-using AnagramSolver.Console;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Database;
 using AnagramSolver.WebApi.Middleware;
@@ -14,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using AnagramSolver.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,17 +24,9 @@ namespace AnagramSolver.WebApi
 {
     public class Startup
     {
-        private readonly IConfigurationRoot _configurationBuilder;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
-            var path = PathGetting.GetFilePath("AnagramSolver/AnagramSolver.Console");
-
-            _configurationBuilder = new ConfigurationBuilder()
-            .SetBasePath(path)
-            .AddJsonFile("appsettings.json", optional: false)
-            .Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -42,10 +34,9 @@ namespace AnagramSolver.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             AnagramSolver.DependencyInjection.DependencyInjection.ConfigureServices(services);
 
-            services.Configure<Settings>(_configurationBuilder.GetSection(
+            services.Configure<Settings>(Configuration.GetSection(
                                         Settings.HandlingOptions));
 
             services.AddControllers();
