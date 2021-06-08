@@ -1,4 +1,5 @@
-﻿using AnagramSolver.Console.Writers;
+﻿using AnagramSolver.BusinessLogic.Exceptions;
+using AnagramSolver.Console.Writers;
 using AnagramSolver.Contracts.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,12 @@ namespace AnagramSolver.Console
     {
         private readonly IAnagramSolverService _anagramSolverService;
         private readonly IWriter _consoleWriter;
-        private readonly IApiWordService _apiWordService;
+        private readonly IClientService _clientService;
 
-        public AnagramSolverCLI(IAnagramSolverService anagramSolverService, IApiWordService apiWordService)
+        public AnagramSolverCLI(IAnagramSolverService anagramSolverService, IClientService clientService)
         {
             _anagramSolverService = anagramSolverService;
-            _apiWordService = apiWordService;
+            _clientService = clientService;
             _consoleWriter = new ConsoleWriter();
         }
 
@@ -37,9 +38,13 @@ namespace AnagramSolver.Console
                     _consoleWriter.PrintAnagrams(anagrams, myWord);
                 }    
             }
-            catch (ArgumentException ex)
+            catch (AggregateException ae)
             {
-                _consoleWriter.PrintLine(ex.Message);
+                ae.Handle(ex => {
+                    if (ex is CustomException)
+                        _consoleWriter.PrintLine(ex.Message);
+                    return ex is CustomException;
+                });
             }
         }
 
@@ -48,7 +53,7 @@ namespace AnagramSolver.Console
             try
             {
                 var myWord = _consoleWriter.ReadLine("\nPlease enter your word:");
-                var anagrams = _apiWordService.SendGetAnagramsRequest(myWord).Result;
+                var anagrams = _clientService.SendGetAnagramsRequestAsync(myWord).Result;
 
                 if (!anagrams.Any())
                 {
@@ -59,9 +64,13 @@ namespace AnagramSolver.Console
                     _consoleWriter.PrintAnagrams(anagrams, myWord);
                 }
             }
-            catch (ArgumentException ex)
+            catch (AggregateException ae)
             {
-                _consoleWriter.PrintLine(ex.Message);
+                ae.Handle(ex => {
+                    if (ex is CustomException)
+                        _consoleWriter.PrintLine(ex.Message);
+                    return ex is CustomException;
+                });
             }
         }
     }

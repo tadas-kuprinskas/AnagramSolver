@@ -1,4 +1,5 @@
-﻿using AnagramSolver.BusinessLogic.StaticHelpers;
+﻿using AnagramSolver.BusinessLogic.Exceptions;
+using AnagramSolver.BusinessLogic.StaticHelpers;
 using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
@@ -15,7 +16,7 @@ namespace AnagramSolver.Database
 {
     public class WordRepository : IWordRepository
     {
-        private readonly BusinessLogic.Utilities.Settings _options;
+        private readonly Settings _options;
 
         public WordRepository(IOptions<Settings> options)
         {
@@ -62,7 +63,7 @@ namespace AnagramSolver.Database
             return dictionary;
         }
 
-        public static void AddWordToDictionary(Dictionary<string, HashSet<Word>> anagrams, string orderedWord, string word, 
+        private static void AddWordToDictionary(Dictionary<string, HashSet<Word>> anagrams, string orderedWord, string word, 
             string partOfSpeech)
         {
             if (anagrams.ContainsKey(orderedWord))
@@ -77,6 +78,27 @@ namespace AnagramSolver.Database
                     Mapping.MapToWord(orderedWord, word, partOfSpeech)
                 });
             }
+        }
+
+        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize)
+        {
+            var itemsNumber = 50;
+            var words = ReadAndGetDictionary().Values.SelectMany(w => w.Select(x => x.Value)).ToList();
+
+            int count = words.Count;
+            itemsNumber = pageSize < 1 ? itemsNumber : pageSize;
+
+            var totalPages = (int)Math.Ceiling(count / (double)itemsNumber);
+
+            var pagenumber = currentPage > totalPages ? totalPages : currentPage;
+
+            var items = words.Skip((pagenumber - 1) * itemsNumber).Take(itemsNumber).ToList();
+
+            if(items.Count == 0)
+            {
+                throw new CustomException("The page is empty");
+            }
+            return items;
         }
     }
 }

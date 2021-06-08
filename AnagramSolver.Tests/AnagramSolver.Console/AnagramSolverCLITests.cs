@@ -21,7 +21,7 @@ namespace AnagramSolver.Tests.AnagramSolver.Console
         private HashSet<Word> _words;
         private AnagramSolverCLI _anagramSolverCLI;
         private Mock<IAnagramSolverService> _anagramSolverService;
-        private Mock<IApiWordService> _apiWordService;
+        private Mock<IClientService> _apiWordService;
 
         [SetUp]
         public void Setup()

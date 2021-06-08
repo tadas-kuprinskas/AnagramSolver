@@ -42,7 +42,6 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
         public void DownloadDictionary_GivenCorrectValues_ReturnsCorrectName()
         {
             var file = _fileDownloadController.DownloadDictionary();
-            var fileName = file.FileDownloadName;
 
             file.ContentType.ShouldBe("application/octet-stream");
         }

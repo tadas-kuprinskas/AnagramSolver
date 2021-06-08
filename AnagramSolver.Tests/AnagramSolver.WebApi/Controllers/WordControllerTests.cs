@@ -23,20 +23,10 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
         [SetUp]
         public void Setup()
         {
-            Mock<IApiWordService> _mockApiWordService = new();
             Mock<IAnagramSolverService> _mockAnagramSolverService = new();
+            Mock<IWordRepository> _mockWordRepository = new();
 
-            _wordController = new(_mockApiWordService.Object, _mockAnagramSolverService.Object);
-        }
-
-        [TestCase(10, 20)]
-        public void GetPaginatedWords_GivenPageSize_ReturnsSuccessfulStatusCode(int currentPage, int membersNumber)
-        {
-            var result = _wordController.GetPaginatedWords(currentPage, membersNumber);
-            var okResult = result as OkObjectResult;
-
-            Assert.IsNotNull(okResult);
-            Assert.AreEqual(200, okResult.StatusCode);
+            _wordController = new(_mockWordRepository.Object, _mockAnagramSolverService.Object);
         }
 
         [TestCase(1, 30)]
@@ -44,7 +34,7 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
         {
             var result = _wordController.GetPaginatedWords(currentPage, membersNumber);
 
-            Assert.IsInstanceOf<IActionResult>(result);
+            Assert.IsInstanceOf<IEnumerable<string>>(result);
         }
 
         [TestCase("sula")]

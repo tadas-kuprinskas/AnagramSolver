@@ -56,12 +56,8 @@ namespace AnagramSolver.BusinessLogic.Services
 
             var orderedWord = String.Concat(myWordTrimmed.ToLower().OrderBy(c => c));
 
-            foreach (var word in words)
-            {
-                orderedWord = String.Concat(word.ToLower().OrderBy(c => c));
-                listOfLists.Add(FindSingleWordAnagrams(orderedWord));
-            }
-
+            words.ToList().ForEach(w => listOfLists.Add(FindSingleWordAnagrams(String.Concat(w.ToLower().OrderBy(c => c)))));
+           
             listOfWords = listOfLists.Where(l => l != null).SelectMany(l => l).OrderBy(w => w.PartOfSpeech).ToHashSet();
 
             return listOfWords;

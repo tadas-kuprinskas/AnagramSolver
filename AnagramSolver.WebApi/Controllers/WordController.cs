@@ -1,4 +1,5 @@
-﻿using AnagramSolver.Contracts.Interfaces;
+﻿using AnagramSolver.BusinessLogic.Exceptions;
+using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,28 +18,19 @@ namespace AnagramSolver.WebApi.Controllers
     [Route("[controller]")]
     public class WordController : ControllerBase
     {
-        private readonly IApiWordService _apiWordService;
+        private readonly IWordRepository _wordRepository;
         private readonly IAnagramSolverService _anagramSolverService;
 
-        public WordController(IApiWordService apiWordService, IAnagramSolverService anagramSolverService)
+        public WordController(IWordRepository wordRepository, IAnagramSolverService anagramSolverService)
         {
-            _apiWordService = apiWordService;
+            _wordRepository = wordRepository;
             _anagramSolverService = anagramSolverService;
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Word>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-        public IActionResult GetPaginatedWords(int currentPage, int pageSize)
+        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize)
         {
-            try
-            {
-                return Ok(_apiWordService.GetPaginatedWords(currentPage, pageSize));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return _wordRepository.GetPaginatedWords(currentPage, pageSize);
         }
 
         [HttpGet("Anagrams")]
@@ -55,6 +47,5 @@ namespace AnagramSolver.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }

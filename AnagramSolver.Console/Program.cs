@@ -18,7 +18,7 @@ namespace AnagramSolver
             var serviceProvider = services.BuildServiceProvider();
 
             var anagramSolverService = serviceProvider.GetService<IAnagramSolverService>();
-            var apiWordService = serviceProvider.GetService<IApiWordService>();
+            var apiWordService = serviceProvider.GetService<IClientService>();
 
             var anagramSolverCli = new AnagramSolverCLI(anagramSolverService, apiWordService);
 

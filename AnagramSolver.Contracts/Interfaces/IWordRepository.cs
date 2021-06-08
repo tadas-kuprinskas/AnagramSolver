@@ -7,5 +7,6 @@ namespace AnagramSolver.Contracts.Interfaces
     public interface IWordRepository
     {
         Dictionary<string, HashSet<Word>> ReadAndGetDictionary();
+        IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize);
     }
 }

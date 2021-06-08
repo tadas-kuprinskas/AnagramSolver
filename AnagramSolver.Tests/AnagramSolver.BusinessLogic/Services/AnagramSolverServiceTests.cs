@@ -40,7 +40,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             var mockValidationService = new Mock<IValidationService>();
 
             Settings wordHandlingOptions = new() { NumberOfAnagrams = 10 };
-            var mockOptions = new Mock<IOptions<global::AnagramSolver.BusinessLogic.Utilities.Settings>>();
+            var mockOptions = new Mock<IOptions<Settings>>();
 
             mockOptions.Setup(ap => ap.Value).Returns(wordHandlingOptions);
 

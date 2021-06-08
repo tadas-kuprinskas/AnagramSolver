@@ -31,37 +31,6 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
             _wordRepository = new(mockOptions.Object);
         }
 
-        private static Dictionary<string, HashSet<Word>> GetDictionary()
-        {
-            var orderedWord = "adeisv";
-            var orderedSecondWord = "aegrs";
-
-            var fixture = new Fixture();
-
-            fixture.Customize<Word>(w => w.With(p => p.Value, "dievas").With(p => p.OrderedValue, orderedWord));
-            var firstWord = fixture.Create<Word>();
-
-            fixture.Customize<Word>(w => w.With(p => p.Value, "vedasi").With(p => p.OrderedValue, orderedWord));
-            var secondWord = fixture.Create<Word>();
-
-            fixture.Customize<Word>(w => w.With(p => p.Value, "garse").With(p => p.OrderedValue, orderedSecondWord));
-            var thirdWord = fixture.Create<Word>();
-
-            fixture.Customize<Word>(w => w.With(p => p.Value, "serga").With(p => p.OrderedValue, orderedSecondWord));
-            var fourthWord = fixture.Create<Word>();
-
-            HashSet<Word> firstHashSet = new() { firstWord, secondWord };
-            HashSet<Word> secondHashSet = new() { thirdWord, fourthWord };
-
-            Dictionary<string, HashSet<Word>> dictionary = new() 
-            {
-                { orderedWord, firstHashSet },
-                { orderedSecondWord, secondHashSet }
-            };
-
-            return dictionary;
-        }
-
         [Test]
         public void ReadAndGetDictionary_GivenCorrectValuesInMethod_ReturnsCorrectTypeNotEmptyDictionary()
         {
@@ -71,24 +40,20 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
             dictionary.ShouldNotBeEmpty();
         }
 
-        [Test]
-        public void AddWordToDictionary_AddingNewValue_DictionaryCountIncreases()
+        [TestCase(1, 20)]
+        public void GetPaginatedWords_GivenPageSize_ReturnsCorrectAmountOfItemsOnPage(int currentPage, int pageSize)
         {
-            var dictionary = GetDictionary();
-            var orderedWord = "aimsv";
-            var word = "visam";
+            var wordList = _wordRepository.GetPaginatedWords(currentPage, pageSize);
 
-            Word newWord = new()
-            {
-                Value = "savim",
-                OrderedValue = orderedWord,
-                PartOfSpeech = "įv"
-            };
+            wordList.Count().ShouldBe(pageSize);
+        }
 
-            WordRepository.AddWordToDictionary(dictionary, orderedWord, word, newWord.PartOfSpeech);
+        [TestCase(3, 50)]
+        public void GetPaginatedWords_GivenDifferentPageSizeAndPageNumber_ReturnsCorrectAmountOfItemsOnPage(int currentPage, int pageSize)
+        {
+            var wordList = _wordRepository.GetPaginatedWords(currentPage, pageSize);
 
-            dictionary.ShouldNotBeEmpty();
-            dictionary.Count.ShouldBe(3);
+            wordList.Count().ShouldBe(pageSize);
         }
     }
 }

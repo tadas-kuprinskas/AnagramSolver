@@ -31,7 +31,7 @@ namespace AnagramSolver.DependencyInjection
             services.AddScoped<IAnagramSolverService, AnagramSolverService>()
                     .AddScoped<IWordRepository, WordRepository>()
                     .AddScoped<IValidationService, ValidationService>()
-                    .AddScoped<IApiWordService, ApiWordService>();
+                    .AddScoped<IClientService, AnagramClientService>();
         }
     }
 }

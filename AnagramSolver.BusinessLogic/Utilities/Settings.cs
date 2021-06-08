@@ -13,5 +13,6 @@ namespace AnagramSolver.BusinessLogic.Utilities
         public int MinInputLength { get; set; }
         public int NumberOfAnagrams { get; set; }
         public string FilePath { get; set; }
+        public string WordUri { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using AnagramSolver.BusinessLogic.Services;
+﻿using AnagramSolver.BusinessLogic.Exceptions;
+using AnagramSolver.BusinessLogic.Services;
 using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Contracts.Models;
 using AutoFixture;
@@ -41,7 +42,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
         [TestCase("ir")]
         public void ValidateInputLength_GivenInvalidLengthInputs_ThrowsArgumentExceptionWithCorrectMessage(string myWord)
         {
-            Assert.Throws<ArgumentException>(() => _validationService.ValidateInputLength(myWord)).Message.ShouldBe($"Input cannot be shorter than {_handlingOptions.MinInputLength} letters");
+            Assert.Throws<CustomException>(() => _validationService.ValidateInputLength(myWord)).Message.ShouldBe($"Input cannot be shorter than {_handlingOptions.MinInputLength} letters");
         }
     }
 }
