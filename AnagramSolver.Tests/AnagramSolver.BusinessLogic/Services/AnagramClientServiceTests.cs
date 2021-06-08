@@ -10,6 +10,7 @@ using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,9 +29,11 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             var mockOptions = new Mock<IOptions<Settings>>();
             mockOptions.Setup(ap => ap.Value).Returns(_handlingOptions);
 
+            var mockHttpClient = new Mock<IHttpClientFactory>();
+
             var mockValidationService = new Mock<IValidationService>();
 
-            _anagramClientService = new(mockOptions.Object, mockValidationService.Object);
+            _anagramClientService = new(mockOptions.Object, mockValidationService.Object, mockHttpClient.Object);
         }
 
         [TestCase("veidas")]

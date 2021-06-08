@@ -17,13 +17,13 @@ namespace AnagramSolver.BusinessLogic.Services
     public class AnagramClientService : IClientService
     {
         private readonly Settings _options;
-        private readonly HttpClient _client;
+        private readonly IHttpClientFactory _clientFactory;
         private readonly IValidationService _validationService;
 
-        public AnagramClientService(IOptions<Settings> options, IValidationService validationService)
+        public AnagramClientService(IOptions<Settings> options, IValidationService validationService, IHttpClientFactory clientFactory)
         {
             _options = options.Value;
-            _client = new();
+            _clientFactory = clientFactory;
             _validationService = validationService;
         }
 
@@ -31,13 +31,16 @@ namespace AnagramSolver.BusinessLogic.Services
         {
             _validationService.ValidateInputLength(myWord);
 
-            var httpResponse = await _client.GetAsync(_options.WordUri + myWord);
+            var request = new HttpRequestMessage(HttpMethod.Get, _options.WordUri + myWord);
+
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
 
             var anagrams = new List<string>();
 
-            if (httpResponse.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                var contentString = await httpResponse.Content.ReadAsStringAsync();
+                var contentString = await response.Content.ReadAsStringAsync();
                 anagrams = JsonSerializer.Deserialize<List<string>>(contentString);
             }
             return anagrams;
