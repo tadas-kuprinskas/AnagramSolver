@@ -3,6 +3,7 @@ using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Console;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Database;
+using AnagramSolver.WebApi.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -57,6 +58,9 @@ namespace AnagramSolver.WebApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // global error handler
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

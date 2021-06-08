@@ -2,7 +2,7 @@
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +38,7 @@ namespace AnagramSolver.BusinessLogic.Services
             if (httpResponse.IsSuccessStatusCode)
             {
                 var contentString = await httpResponse.Content.ReadAsStringAsync();
-                anagrams = JsonConvert.DeserializeObject<List<string>>(contentString);
+                anagrams = JsonSerializer.Deserialize<List<string>>(contentString);
             }
             return anagrams;
         }

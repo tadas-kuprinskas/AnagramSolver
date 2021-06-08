@@ -1,4 +1,5 @@
-﻿using AnagramSolver.BusinessLogic.Utilities;
+﻿using AnagramSolver.BusinessLogic.StaticHelpers;
+using AnagramSolver.BusinessLogic.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
@@ -22,12 +23,7 @@ namespace AnagramSolver.WebApi.Controllers
         [Route("Dictionary")]
         public FileContentResult DownloadDictionary()
         {
-            var solutionPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
-
-            int index = solutionPath.IndexOf("\\AnagramSolver");
-            solutionPath = solutionPath.Substring(0, index);
-
-            var filePath = Path.Combine(solutionPath, "AnagramSolver", _options.FilePath);
+            var filePath = PathGetting.GetFilePath("AnagramSolver\\" + _options.FilePath);
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, filePath);

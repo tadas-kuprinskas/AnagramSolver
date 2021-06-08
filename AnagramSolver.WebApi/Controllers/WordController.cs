@@ -34,18 +34,9 @@ namespace AnagramSolver.WebApi.Controllers
         }
 
         [HttpGet("Anagrams")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<string>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-        public IActionResult GetUniqueAnagrams(string myWord)
+        public IEnumerable<string> GetUniqueAnagrams(string myWord)
         {
-            try
-            {
-                return Ok(_anagramSolverService.GetUniqueAnagrams(myWord).Select(w => w.Value));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return _anagramSolverService.GetUniqueAnagrams(myWord).Select(w => w.Value);
         }
     }
 }

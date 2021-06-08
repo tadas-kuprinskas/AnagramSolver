@@ -1,4 +1,5 @@
-﻿using AnagramSolver.BusinessLogic.Utilities;
+﻿using AnagramSolver.BusinessLogic.Exceptions;
+using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +33,14 @@ namespace AnagramSolver.BusinessLogic.Services
 
             _validationService.ValidateInputLength(myWordTrimmed);
 
-            return FindMultipleWordsAnagrams(myWordTrimmed).Where(w => !myWordTrimmed.Split(" ").Contains(w.Value));        
+            var anagrams =  FindMultipleWordsAnagrams(myWordTrimmed).Where(w => !myWordTrimmed.Split(" ").Contains(w.Value));
+            
+            if (!anagrams.Any())
+            {
+                throw new CustomException("There are no anagrams for this word");
+            }
+
+            return anagrams;
         }
 
         public IEnumerable<Word> FindSingleWordAnagrams(string orderedWord)

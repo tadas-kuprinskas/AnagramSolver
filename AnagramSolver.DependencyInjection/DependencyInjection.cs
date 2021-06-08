@@ -1,4 +1,5 @@
 ﻿using AnagramSolver.BusinessLogic.Services;
+using AnagramSolver.BusinessLogic.StaticHelpers;
 using AnagramSolver.BusinessLogic.Utilities;
 //using AnagramSolver.Console;
 //using AnagramSolver.Console.Writers;
@@ -15,13 +16,10 @@ namespace AnagramSolver.DependencyInjection
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            var solutionPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
-
-            int index = solutionPath.IndexOf("\\AnagramSolver");
-            solutionPath = solutionPath.Substring(0, index);
+            var path = PathGetting.GetFilePath("AnagramSolver/AnagramSolver.Console");
 
             var configuration = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(solutionPath, "AnagramSolver/AnagramSolver.Console"))
+            .SetBasePath(path)
             .AddJsonFile("appsettings.json", optional: false)
             .Build();
 

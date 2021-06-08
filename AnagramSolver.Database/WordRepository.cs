@@ -25,12 +25,7 @@ namespace AnagramSolver.Database
 
         public Dictionary<string, HashSet<Word>> ReadAndGetDictionary()
         {
-            var solutionPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
-
-            int index = solutionPath.IndexOf("\\AnagramSolver");
-            solutionPath = solutionPath.Substring(0, index);
-
-            var path = Path.Combine(solutionPath, "AnagramSolver", _options.FilePath);
+            var path = PathGetting.GetFilePath("AnagramSolver\\" + _options.FilePath);
 
             Dictionary<string, HashSet<Word>> dictionary = new();
 
@@ -94,10 +89,11 @@ namespace AnagramSolver.Database
 
             var items = words.Skip((pagenumber - 1) * itemsNumber).Take(itemsNumber).ToList();
 
-            if(items.Count == 0)
+            if (!items.Any())
             {
                 throw new CustomException("The page is empty");
             }
+
             return items;
         }
     }
