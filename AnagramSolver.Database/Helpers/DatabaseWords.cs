@@ -25,6 +25,7 @@ namespace AnagramSolver.Repository.Helpers
             IWordRepository fileWords = new WordRepository(options);
 
             //databaseWords.GetPaginatedWords(80, 20); testing
+            //databaseWords.ReadAndGetDictionary(); testing
 
             var words = fileWords.GetAllWords();
             int id = 1;

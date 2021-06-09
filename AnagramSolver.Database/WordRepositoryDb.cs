@@ -1,4 +1,5 @@
-﻿using AnagramSolver.BusinessLogic.Utilities;
+﻿using AnagramSolver.BusinessLogic.StaticHelpers;
+using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
 using Microsoft.Extensions.Options;
@@ -82,11 +83,6 @@ namespace AnagramSolver.Repository
             return paginatedWords;
         }
 
-        public Dictionary<string, HashSet<Word>> ReadAndGetDictionary()
-        {
-            throw new NotImplementedException();
-        }
-
         public void AddWordsToDatabase(Word word, int id)
         {
             var insertQuery = "INSERT INTO Word (Id, Value, PartOfSpeech, OrderedValue)" +
@@ -105,6 +101,63 @@ namespace AnagramSolver.Repository
                 cmd.ExecuteNonQuery();
             }
             _sqlConnection.Close();
+        }
+
+
+        public Dictionary<string, HashSet<Word>> ReadAndGetDictionary()
+        {
+            var insertQuery = "Select * from Word";
+
+            _sqlConnection.Open();
+
+            SqlCommand cmd = new(insertQuery, _sqlConnection);
+            SqlDataReader dataReader = cmd.ExecuteReader();
+
+            Dictionary<string, HashSet<Word>> dictionary = new();
+
+            if (dataReader.HasRows)
+            {
+                while (dataReader.Read())
+                {
+                    var id = Convert.ToInt32(dataReader["Id"]);
+                    var word = dataReader["Value"].ToString();
+                    var partOfSpeech = dataReader["PartOfSpeech"].ToString();
+                    var orderedWord = dataReader["OrderedValue"].ToString();
+
+                    AddWordToDictionary(dictionary, id, orderedWord, word, partOfSpeech);
+                }
+            }
+            _sqlConnection.Close();
+            return dictionary;
+        }
+
+        private static void AddWordToDictionary(Dictionary<string, HashSet<Word>> anagrams, int id, string orderedWord, string word,
+            string partOfSpeech)
+        {
+            if (anagrams.ContainsKey(orderedWord))
+            {
+                anagrams[orderedWord].Add(
+                new Word()
+                {
+                    Id = id,
+                    Value = word,
+                    PartOfSpeech = partOfSpeech,
+                    OrderedValue = orderedWord
+                });
+            }
+            else
+            {
+                anagrams.Add(orderedWord, new HashSet<Word>()
+                {
+                    new Word()
+                    {
+                        Id = id,
+                        Value = word,
+                        PartOfSpeech = partOfSpeech,
+                        OrderedValue = orderedWord
+                    }
+                });
+            }
         }
     }
 }
