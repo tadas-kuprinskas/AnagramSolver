@@ -53,24 +53,33 @@ namespace AnagramSolver.Repository
 
         public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize)
         {
-            //var itemsNumber = 50;
-            //var words = GetAllWords().Select(w => w.Value);
+            var itemsNumber = 50;
 
-            //int count = words.Count();
-            //itemsNumber = pageSize < 1 ? itemsNumber : pageSize;
+            var words = GetAllWords();
+            int count = words.Count();
+            itemsNumber = pageSize < 1 ? itemsNumber : pageSize;
+            var totalPages = (int)Math.Ceiling(count / (double)itemsNumber);
+            var pagenumber = currentPage > totalPages ? totalPages : currentPage;
+            var firstWordId = (pagenumber - 1) * itemsNumber;
+            var lastWordId = pagenumber * itemsNumber;
 
-            //var totalPages = (int)Math.Ceiling(count / (double)itemsNumber);
+            _sqlConnection.Open();
 
-            //var pagenumber = currentPage > totalPages ? totalPages : currentPage;
+            var insertQuery = $"Select * from Word where Id between {firstWordId + 1} and {lastWordId}";
 
-            //var items = words.Skip((pagenumber - 1) * itemsNumber).Take(itemsNumber).ToList();
+            SqlCommand cmd = new(insertQuery, _sqlConnection);
+            SqlDataReader dataReader = cmd.ExecuteReader();
+            List<string> paginatedWords = new();
 
-            //if (!items.Any())
-            //{
-            //    return Enumerable.Empty<string>();
-            //}
-            //return items;
-            return null;
+            if (dataReader.HasRows)
+            {
+                while (dataReader.Read())
+                {
+                    paginatedWords.Add(dataReader["Value"].ToString());
+                }
+            }
+            _sqlConnection.Close();
+            return paginatedWords;
         }
 
         public Dictionary<string, HashSet<Word>> ReadAndGetDictionary()
