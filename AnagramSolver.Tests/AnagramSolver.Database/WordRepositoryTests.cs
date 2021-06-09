@@ -19,10 +19,14 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
     {
         private Settings _options;
         private WordRepository _wordRepository;
+        private IEnumerable<string> _words;
 
         [SetUp]
         public void Setup()
         {
+            var fixture = new Fixture();
+            _words = new List<string>() { "sportas", "vedasi", "sula", "veidas", "alus", "praktika", "veidas"};
+
             _options = new() { FilePath = "AnagramSolver.Contracts/Data/zodynas.txt" };
 
             var mockOptions = new Mock<IOptions<Settings>>();
@@ -43,17 +47,17 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
         [TestCase(1, 20)]
         public void GetPaginatedWords_GivenPageSize_ReturnsCorrectAmountOfItemsOnPage(int currentPage, int pageSize)
         {
-            var wordList = _wordRepository.GetPaginatedWords(currentPage, pageSize);
+            var wordList = _wordRepository.GetPaginatedWords(currentPage, pageSize, _words, "sula");
 
-            wordList.Count().ShouldBe(pageSize);
+            wordList.Count().ShouldBe(1);
         }
 
         [TestCase(3, 50)]
         public void GetPaginatedWords_GivenDifferentPageSizeAndPageNumber_ReturnsCorrectAmountOfItemsOnPage(int currentPage, int pageSize)
         {
-            var wordList = _wordRepository.GetPaginatedWords(currentPage, pageSize);
+            var wordList = _wordRepository.GetPaginatedWords(currentPage, pageSize, _words, "veidas");
 
-            wordList.Count().ShouldBe(pageSize);
+            wordList.Count().ShouldBe(2);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
         [TestCase(1, 30)]
         public void GetPaginatedWords_GivenPageSize_ReturnsCorrectTypeOfResult(int currentPage, int membersNumber)
         {
-            var result = _wordController.GetPaginatedWords(currentPage, membersNumber);
+            var result = _wordController.GetPaginatedWords(currentPage, membersNumber, "sula");
 
             Assert.IsInstanceOf<IEnumerable<string>>(result);
         }

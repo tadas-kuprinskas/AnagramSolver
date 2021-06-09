@@ -28,9 +28,11 @@ namespace AnagramSolver.WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize)
+        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize, string myWord)
         {
-            return _wordRepository.GetPaginatedWords(currentPage, pageSize);
+            var foundWords = _wordRepository.SearchForWords(myWord);
+ 
+            return _wordRepository.GetPaginatedWords(currentPage, pageSize, foundWords, myWord); 
         }
 
         [HttpGet("Anagrams")]

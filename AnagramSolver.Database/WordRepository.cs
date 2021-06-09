@@ -75,10 +75,9 @@ namespace AnagramSolver.Database
             }
         }
 
-        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize)
+        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize, IEnumerable<string> words, string myWord)
         {
             var itemsNumber = 50;
-            var words = GetAllWords().Select(w => w.Value) ;
 
             int count = words.Count();
             itemsNumber = pageSize < 1 ? itemsNumber : pageSize;
@@ -87,7 +86,7 @@ namespace AnagramSolver.Database
 
             var pagenumber = currentPage > totalPages ? totalPages : currentPage;
 
-            var items = words.Skip((pagenumber - 1) * itemsNumber).Take(itemsNumber).ToList();
+            var items = words.Skip((pagenumber - 1) * itemsNumber).Take(itemsNumber).ToList().Where(w => w.Contains(myWord));
 
             if (!items.Any())
             {
@@ -128,9 +127,18 @@ namespace AnagramSolver.Database
             return words;
         }
 
-        public void AddWordsToDatabase(Word word, int id)
+        public void AddWordsToDatabase(Word word, int id) //should I add my own words to text file in this case?
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<string> SearchForWords(string myWord)
+        {
+            var allWords = GetAllWords().Select(w => w.Value);
+
+            var words = allWords.Where(w => w.Contains(myWord));
+
+            return words;
         }
     }
 }

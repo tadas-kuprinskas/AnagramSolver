@@ -26,11 +26,11 @@ namespace AnagramSolver.Repository
 
         public IEnumerable<Word> GetAllWords()
         {
-            var insertQuery = "Select * from Word";
+            var query = "Select * from Word";
 
             _sqlConnection.Open();
 
-            SqlCommand cmd = new(insertQuery, _sqlConnection);
+            SqlCommand cmd = new(query, _sqlConnection);
             SqlDataReader dataReader = cmd.ExecuteReader();
 
             List<Word> words = new();
@@ -52,35 +52,37 @@ namespace AnagramSolver.Repository
             return words;
         }
 
-        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize)
+        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize, IEnumerable<string> words, string myWord)
         {
-            var itemsNumber = 50;
+            var itemsNumber = 5;
 
-            var words = GetAllWords();
             int count = words.Count();
             itemsNumber = pageSize < 1 ? itemsNumber : pageSize;
             var totalPages = (int)Math.Ceiling(count / (double)itemsNumber);
-            var pagenumber = currentPage > totalPages ? totalPages : currentPage;
-            var firstWordId = (pagenumber - 1) * itemsNumber;
-            var lastWordId = pagenumber * itemsNumber;
+            var pageNumber = currentPage > totalPages ? totalPages : currentPage;
+            var firstWord = (pageNumber - 1) * itemsNumber;
 
             _sqlConnection.Open();
 
-            var insertQuery = $"Select * from Word where Id between {firstWordId + 1} and {lastWordId}";
+            var query = "Select * from Word where Value like @myWord ORDER BY (SELECT NULL) offset @firstWord rows fetch next @itemsNumber rows only";
 
-            SqlCommand cmd = new(insertQuery, _sqlConnection);
+            SqlCommand cmd = new(query, _sqlConnection);
+            cmd.Parameters.Add(new SqlParameter("myWord", myWord + "%"));
+            cmd.Parameters.Add(new SqlParameter("firstWord", firstWord));
+            cmd.Parameters.Add(new SqlParameter("itemsNumber", itemsNumber));
+
             SqlDataReader dataReader = cmd.ExecuteReader();
-            List<string> paginatedWords = new();
+            List<string> foundWords = new();
 
             if (dataReader.HasRows)
             {
                 while (dataReader.Read())
                 {
-                    paginatedWords.Add(dataReader["Value"].ToString());
+                    foundWords.Add(dataReader["Value"].ToString());
                 }
             }
             _sqlConnection.Close();
-            return paginatedWords;
+            return foundWords;
         }
 
         public void AddWordsToDatabase(Word word, int id)
@@ -106,11 +108,11 @@ namespace AnagramSolver.Repository
 
         public Dictionary<string, HashSet<Word>> ReadAndGetDictionary()
         {
-            var insertQuery = "Select * from Word";
+            var query = "Select * from Word";
 
             _sqlConnection.Open();
 
-            SqlCommand cmd = new(insertQuery, _sqlConnection);
+            SqlCommand cmd = new(query, _sqlConnection);
             SqlDataReader dataReader = cmd.ExecuteReader();
 
             Dictionary<string, HashSet<Word>> dictionary = new();
@@ -158,6 +160,31 @@ namespace AnagramSolver.Repository
                     }
                 });
             }
+        }
+
+        public IEnumerable<string> SearchForWords(string myWord)
+        {
+            var query = "Select Value from Word where Value like @myWord";
+
+            _sqlConnection.Open();
+
+            List<string> words = new();
+
+            using (SqlCommand cmd = new(query, _sqlConnection))
+            {
+                cmd.Parameters.Add(new SqlParameter("myWord", myWord+"%"));
+                SqlDataReader dataReader = cmd.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        words.Add( dataReader["Value"].ToString() );
+                    }
+                }
+            }          
+            _sqlConnection.Close();
+            return words;
         }
     }
 }
