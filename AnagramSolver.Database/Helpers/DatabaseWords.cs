@@ -15,10 +15,12 @@ namespace AnagramSolver.Repository.Helpers
     {
         public static void AddWordsToDb()
         {
-            IWordRepository databaseWords = new WordRepositoryDb();
+            var settings = new Settings() { FilePath = "AnagramSolver.Contracts/Data/zodynas.txt", 
+                ConnectionString = "Server=.;Database=AnagramSolver;Trusted_Connection=True;" };
 
-            var settings = new Settings() { FilePath = "AnagramSolver.Contracts/Data/zodynas.txt" };
             IOptions<Settings> options = Options.Create(settings);
+
+            IWordRepository databaseWords = new WordRepositoryDb(options);
 
             IWordRepository fileWords = new WordRepository(options);
 
