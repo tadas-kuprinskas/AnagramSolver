@@ -4,6 +4,7 @@ using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Console;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.DependencyInjection;
+using AnagramSolver.Repository.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -15,18 +16,9 @@ namespace AnagramSolver
     {
         static void Main(string[] args)
         {
-            var services = new ServiceCollection();
+            DatabaseWords.AddWordsToDb();
 
-            ConfigureAppSettings(services);
-
-            AnagramSolver.DependencyInjection.DependencyInjection.ConfigureServices(services);
-
-            var serviceProvider = services.BuildServiceProvider();
-
-            var anagramSolverService = serviceProvider.GetService<IAnagramSolverService>();
-            var apiWordService = serviceProvider.GetService<IClientService>();
-
-            var anagramSolverCli = new AnagramSolverCLI(anagramSolverService, apiWordService);
+            var anagramSolverCli = GetAnagramSolverCLI();
 
             while (true)
             {
@@ -45,6 +37,24 @@ namespace AnagramSolver
 
             services.Configure<Settings>(configuration.GetSection(
                                         Settings.HandlingOptions));
+        }
+
+        private static AnagramSolverCLI GetAnagramSolverCLI()
+        {
+            var services = new ServiceCollection();
+
+            ConfigureAppSettings(services);
+
+            AnagramSolver.DependencyInjection.DependencyInjection.ConfigureServices(services);
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var anagramSolverService = serviceProvider.GetService<IAnagramSolverService>();
+            var apiWordService = serviceProvider.GetService<IClientService>();
+
+            var anagramSolverCli = new AnagramSolverCLI(anagramSolverService, apiWordService);
+
+            return anagramSolverCli;
         }
     }
 }

@@ -78,7 +78,7 @@ namespace AnagramSolver.Database
         public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize)
         {
             var itemsNumber = 50;
-            var words = GetAllWords();
+            var words = GetAllWords().Select(w => w.Value) ;
 
             int count = words.Count();
             itemsNumber = pageSize < 1 ? itemsNumber : pageSize;
@@ -96,9 +96,9 @@ namespace AnagramSolver.Database
             return items;
         }
 
-        private IEnumerable<string> GetAllWords()
+        public IEnumerable<Word> GetAllWords()
         {
-            List<string> words = new();
+            List<Word> words = new();
 
             using FileStream fileStream = File.Open(_path, FileMode.Open);
             using StreamReader sr = new(fileStream);
@@ -110,18 +110,27 @@ namespace AnagramSolver.Database
                 string[] values = line.Split("\t");
 
                 var firstWord = values[0];
+                var partOfSpeech = values[1];
                 var secondWord = values[2];
 
-                if(firstWord != null)
+                var orderedFirstWord = String.Concat(firstWord.ToLower().OrderBy(c => c));
+                var orderedSecondWord = String.Concat(secondWord.ToLower().OrderBy(c => c));
+
+                if (firstWord != null)
                 {
-                    words.Add(firstWord);
+                    words.Add(Mapping.MapToWord(orderedFirstWord, firstWord, partOfSpeech));
                 }
                 if (secondWord != null)
                 {
-                    words.Add(firstWord);
+                    words.Add(Mapping.MapToWord(orderedSecondWord, secondWord, partOfSpeech));
                 }
             }
             return words;
+        }
+
+        public void AddWordsToDatabase(Word word, int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

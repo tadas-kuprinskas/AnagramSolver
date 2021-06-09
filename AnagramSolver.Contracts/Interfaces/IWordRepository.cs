@@ -8,5 +8,7 @@ namespace AnagramSolver.Contracts.Interfaces
     {
         Dictionary<string, HashSet<Word>> ReadAndGetDictionary();
         IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize);
+        IEnumerable<Word> GetAllWords();
+        void AddWordsToDatabase(Word word, int id);
     }
 }
