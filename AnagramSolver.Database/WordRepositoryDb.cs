@@ -53,7 +53,7 @@ namespace AnagramSolver.Repository
             return words;
         }
 
-        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize, IEnumerable<string> words, string myWord)
+        public IEnumerable<Word> GetPaginatedWords(int currentPage, int pageSize, IEnumerable<string> words, string myWord)
         {
             var itemsNumber = 5;
 
@@ -75,13 +75,20 @@ namespace AnagramSolver.Repository
             cmd.Parameters.Add(new SqlParameter("itemsNumber", itemsNumber));
 
             SqlDataReader dataReader = cmd.ExecuteReader();
-            List<string> foundWords = new();
+            List<Word> foundWords = new();
 
             if (dataReader.HasRows)
             {
                 while (dataReader.Read())
                 {
-                    foundWords.Add(dataReader["Value"].ToString());
+                    foundWords.Add(
+                        new Word()
+                        {
+                            Id = Convert.ToInt32(dataReader["Id"]),
+                            Value = dataReader["Value"].ToString(),
+                            PartOfSpeech = dataReader["PartOfSpeech"].ToString(),
+                            OrderedValue = dataReader["OrderedValue"].ToString()
+                        });
                 }
             }
             dataReader.Close();
@@ -91,7 +98,7 @@ namespace AnagramSolver.Repository
 
         public void AddWordsToDatabase(Word word, int id)
         {
-            var insertQuery = "INSERT INTO Word (Id, Value, PartOfSpeech, OrderedValue)" +
+            var insertQuery = "Insert into Word (Id, Value, PartOfSpeech, OrderedValue)" +
                 "VALUES(@Id, @Value, @PartOfSpeech, @OrderedValue)";
 
             var sortedWord = String.Concat(word.Value.ToLower().OrderBy(c => c));
@@ -167,13 +174,13 @@ namespace AnagramSolver.Repository
             }
         }
 
-        public IEnumerable<string> SearchForWords(string myWord)
+        public IEnumerable<Word> SearchForWords(string myWord)
         {
-            var query = "Select Value from Word where Value like @myWord";
+            var query = "Select * from Word where Value like @myWord";
 
             _sqlConnection.Open();
 
-            List<string> words = new();
+            List<Word> words = new();
 
             using (SqlCommand cmd = new(query, _sqlConnection))
             {
@@ -184,7 +191,14 @@ namespace AnagramSolver.Repository
                 {
                     while (dataReader.Read())
                     {
-                        words.Add(dataReader["Value"].ToString());
+                        words.Add( 
+                            new Word() 
+                            {
+                                Id = Convert.ToInt32(dataReader["Id"]),
+                                Value = dataReader["Value"].ToString(),
+                                PartOfSpeech = dataReader["PartOfSpeech"].ToString(),
+                                OrderedValue = dataReader["OrderedValue"].ToString()
+                            });
                     }
                 }
                 dataReader.Close();

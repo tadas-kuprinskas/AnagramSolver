@@ -18,27 +18,43 @@ namespace AnagramSolver.WebApi.Controllers
     [Route("[controller]")]
     public class WordController : ControllerBase
     {
-        private readonly IWordRepository _wordRepository;
         private readonly IAnagramSolverService _anagramSolverService;
+        private readonly ICachedWordService _cachedWordService;
+        private readonly IWordServiceDb _wordServiceDb;
 
-        public WordController(IWordRepository wordRepository, IAnagramSolverService anagramSolverService)
+        public WordController(IAnagramSolverService anagramSolverService, ICachedWordService cachedWordService, 
+            IWordServiceDb wordServiceDb)
         {
-            _wordRepository = wordRepository;
             _anagramSolverService = anagramSolverService;
+            _cachedWordService = cachedWordService;
+            _wordServiceDb = wordServiceDb;
         }
 
         [HttpGet]
         public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize, string myWord)
         {
-            var foundWords = _wordRepository.SearchForWords(myWord);
+            var foundWords = _wordServiceDb.SearchForWords(myWord);
  
-            return _wordRepository.GetPaginatedWords(currentPage, pageSize, foundWords, myWord); 
+            return _wordServiceDb.GetPaginatedWords(currentPage, pageSize, foundWords, myWord); 
         }
 
         [HttpGet("Anagrams")]
         public IEnumerable<string> GetUniqueAnagrams(string myWord)
         {
-            return _anagramSolverService.GetUniqueAnagrams(myWord).Select(w => w.Value);
+            var cachedWords = _cachedWordService.SearchCachedWord(myWord);
+
+            List<Word> anagrams;
+
+            if (cachedWords.Count == 0)
+            {
+                 anagrams = _anagramSolverService.GetUniqueAnagrams(myWord).ToList();
+                _cachedWordService.InsertCachedWordIntoTables(myWord, anagrams);
+            }
+            else 
+            {
+                anagrams = _cachedWordService.GetCachedAnagrams(myWord);
+            }
+            return anagrams.Select(w => w.Value);
         }
     }
 }

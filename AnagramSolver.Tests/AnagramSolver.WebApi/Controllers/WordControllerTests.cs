@@ -25,8 +25,13 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
         {
             Mock<IAnagramSolverService> _mockAnagramSolverService = new();
             Mock<IWordRepository> _mockWordRepository = new();
+            Mock<ICachedWordRepository> _mockCachedWordRepository = new();
 
-            _wordController = new(_mockWordRepository.Object, _mockAnagramSolverService.Object);
+            //_mockCachedWordRepository.Setup(m => m.);
+            Mock<ICachedWordService> _mockCachedWordService = new();
+
+           //_wordController = new(_mockWordRepository.Object, _mockCachedWordRepository.Object, _mockAnagramSolverService.Object,
+           //    _mockCachedWordService.Object);
         }
 
         [TestCase(1, 30)]

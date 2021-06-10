@@ -75,7 +75,7 @@ namespace AnagramSolver.Database
             }
         }
 
-        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize, IEnumerable<string> words, string myWord)
+        public IEnumerable<Word> GetPaginatedWords(int currentPage, int pageSize, IEnumerable<string> words, string myWord)
         {
             var itemsNumber = 50;
 
@@ -88,11 +88,22 @@ namespace AnagramSolver.Database
 
             var items = words.Skip((pagenumber - 1) * itemsNumber).Take(itemsNumber).ToList().Where(w => w.Contains(myWord));
 
+            List<Word> wordList = new();
+
+            foreach (var item in items)
+            {
+                wordList.Add(
+                    new Word()
+                    {
+                        Value = item
+                    });
+            }
+
             if (!items.Any())
             {
-                return Enumerable.Empty<string>();
+                return Enumerable.Empty<Word>();
             }
-            return items;
+            return wordList;
         }
 
         public IEnumerable<Word> GetAllWords()
@@ -132,11 +143,11 @@ namespace AnagramSolver.Database
             throw new NotImplementedException();
         }
 
-        public IEnumerable<string> SearchForWords(string myWord)
+        public IEnumerable<Word> SearchForWords(string myWord)
         {
-            var allWords = GetAllWords().Select(w => w.Value);
+            var allWords = GetAllWords();
 
-            var words = allWords.Where(w => w.Contains(myWord));
+            var words = allWords.Where(w => w.Value.Contains(myWord));
 
             return words;
         }
