@@ -10,6 +10,6 @@ namespace AnagramSolver.Contracts.Interfaces
         IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize, IEnumerable<string> words, string myWord);
         IEnumerable<Word> GetAllWords();
         void AddWordsToDatabase(Word word, int id);
-        IEnumerable<string> SearchForWords(string myWord);
+        IEnumerable<Word> SearchForWords(string myWord);
     }
 }

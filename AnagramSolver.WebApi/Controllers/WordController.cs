@@ -30,7 +30,7 @@ namespace AnagramSolver.WebApi.Controllers
         [HttpGet]
         public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize, string myWord)
         {
-            var foundWords = _wordRepository.SearchForWords(myWord);
+            var foundWords = _wordRepository.SearchForWords(myWord).Select(w => w.Value);
  
             return _wordRepository.GetPaginatedWords(currentPage, pageSize, foundWords, myWord); 
         }

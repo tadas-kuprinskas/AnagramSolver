@@ -48,6 +48,7 @@ namespace AnagramSolver.Repository
                     });
                 }
             }
+            dataReader.Close();
             _sqlConnection.Close();
             return words;
         }
@@ -55,6 +56,8 @@ namespace AnagramSolver.Repository
         public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize, IEnumerable<string> words, string myWord)
         {
             var itemsNumber = 5;
+
+            currentPage = (currentPage == 0) ? 1 : currentPage;
 
             int count = words.Count();
             itemsNumber = pageSize < 1 ? itemsNumber : pageSize;
@@ -81,6 +84,7 @@ namespace AnagramSolver.Repository
                     foundWords.Add(dataReader["Value"].ToString());
                 }
             }
+            dataReader.Close();
             _sqlConnection.Close();
             return foundWords;
         }
@@ -129,6 +133,7 @@ namespace AnagramSolver.Repository
                     AddWordToDictionary(dictionary, id, orderedWord, word, partOfSpeech);
                 }
             }
+            dataReader.Close();
             _sqlConnection.Close();
             return dictionary;
         }
@@ -162,13 +167,13 @@ namespace AnagramSolver.Repository
             }
         }
 
-        public IEnumerable<string> SearchForWords(string myWord)
+        public IEnumerable<Word> SearchForWords(string myWord)
         {
             var query = "Select Value from Word where Value like @myWord";
 
             _sqlConnection.Open();
 
-            List<string> words = new();
+            List<Word> words = new();
 
             using (SqlCommand cmd = new(query, _sqlConnection))
             {
@@ -179,10 +184,17 @@ namespace AnagramSolver.Repository
                 {
                     while (dataReader.Read())
                     {
-                        words.Add( dataReader["Value"].ToString() );
+                        words.Add(new Word()
+                        {
+                            Id = Convert.ToInt32(dataReader["Id"]),
+                            Value = dataReader["Value"].ToString(),
+                            PartOfSpeech = dataReader["PartOfSpeech"].ToString(),
+                            OrderedValue = dataReader["OrderedValue"].ToString()
+                        }); ;
                     }
                 }
-            }          
+                dataReader.Close();
+            }
             _sqlConnection.Close();
             return words;
         }
