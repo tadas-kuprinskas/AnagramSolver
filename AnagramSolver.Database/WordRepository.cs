@@ -132,11 +132,11 @@ namespace AnagramSolver.Database
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Word> SearchForWords(string myWord)
+        public IEnumerable<string> SearchForWords(string myWord)
         {
-            var allWords = GetAllWords();
+            var allWords = GetAllWords().Select(w => w.Value);
 
-            var words = allWords.Where(w => w.Value.Contains(myWord));
+            var words = allWords.Where(w => w.Contains(myWord));
 
             return words;
         }

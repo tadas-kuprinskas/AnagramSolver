@@ -167,30 +167,24 @@ namespace AnagramSolver.Repository
             }
         }
 
-        public IEnumerable<Word> SearchForWords(string myWord)
+        public IEnumerable<string> SearchForWords(string myWord)
         {
             var query = "Select Value from Word where Value like @myWord";
 
             _sqlConnection.Open();
 
-            List<Word> words = new();
+            List<string> words = new();
 
             using (SqlCommand cmd = new(query, _sqlConnection))
             {
-                cmd.Parameters.Add(new SqlParameter("myWord", myWord+"%"));
+                cmd.Parameters.Add(new SqlParameter("myWord", myWord + "%"));
                 SqlDataReader dataReader = cmd.ExecuteReader();
 
                 if (dataReader.HasRows)
                 {
                     while (dataReader.Read())
                     {
-                        words.Add(new Word()
-                        {
-                            Id = Convert.ToInt32(dataReader["Id"]),
-                            Value = dataReader["Value"].ToString(),
-                            PartOfSpeech = dataReader["PartOfSpeech"].ToString(),
-                            OrderedValue = dataReader["OrderedValue"].ToString()
-                        }); ;
+                        words.Add(dataReader["Value"].ToString());
                     }
                 }
                 dataReader.Close();
