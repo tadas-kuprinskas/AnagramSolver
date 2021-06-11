@@ -67,7 +67,7 @@ namespace AnagramSolver.Repository
 
             _sqlConnection.Open();
 
-            var query = "Select * from Word where Value like @myWord ORDER BY (SELECT NULL) offset @firstWord rows fetch next @itemsNumber rows only";
+            var query = "Select * from Word where Value like @myWord ORDER BY (Value) offset @firstWord rows fetch next @itemsNumber rows only";
 
             SqlCommand cmd = new(query, _sqlConnection);
             cmd.Parameters.Add(new SqlParameter("myWord", myWord + "%"));
@@ -96,10 +96,11 @@ namespace AnagramSolver.Repository
             return foundWords;
         }
 
-        public void AddWordsToDatabase(Word word, int id)
+        public void AddWordsToDatabase(Word word)
         {
-            var insertQuery = "Insert into Word (Id, Value, PartOfSpeech, OrderedValue)" +
-                "VALUES(@Id, @Value, @PartOfSpeech, @OrderedValue)";
+            var insertQuery = "Insert into Word (Value, PartOfSpeech, OrderedValue)" +
+                              "VALUES(@Value, @PartOfSpeech, @OrderedValue)";
+                
 
             var sortedWord = String.Concat(word.Value.ToLower().OrderBy(c => c));
 
@@ -107,7 +108,6 @@ namespace AnagramSolver.Repository
 
             using (SqlCommand cmd = new(insertQuery, _sqlConnection))
             {
-                cmd.Parameters.Add(new SqlParameter("@Id", id));
                 cmd.Parameters.Add(new SqlParameter("@Value", word.Value));
                 cmd.Parameters.Add(new SqlParameter("@PartOfSpeech", word.PartOfSpeech));
                 cmd.Parameters.Add(new SqlParameter("@OrderedValue", sortedWord));

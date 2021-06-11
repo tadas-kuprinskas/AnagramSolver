@@ -16,7 +16,8 @@ namespace AnagramSolver
     {
         static void Main(string[] args)
         {
-            DatabaseWords.AddWordsToDb();
+            //DatabaseWords.AddWordsToDb();
+            //StoredProcedure.RemoveTableData("Word"); //test
 
             var anagramSolverCli = GetAnagramSolverCLI();
 

@@ -23,15 +23,48 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
         [SetUp]
         public void Setup()
         {
+            CachedWord firstCachedWord = new()
+            {
+                Id = 1,
+                Value = "sula"
+            };
+
+            CachedWord secondCachedWord = new()
+            {
+                Id = 2,
+                Value = "veidas"
+            };
+
+            Word firstWord = new()
+            {
+                Id = 1,
+                Value = "visma",
+                OrderedValue = "aimsv",
+                PartOfSpeech = "dkt"
+            };
+
+            Word secondWord = new()
+            {
+                Id = 2,
+                Value = "rytas",
+                OrderedValue = "ayrst",
+                PartOfSpeech = "dkt"
+            };
+
+            List<CachedWord> cachedWords = new() { firstCachedWord, secondCachedWord };
+            List<Word> words = new() { firstWord, secondWord };
+
+
+            var word = "sula";
             Mock<IAnagramSolverService> _mockAnagramSolverService = new();
-            Mock<IWordRepository> _mockWordRepository = new();
-            Mock<ICachedWordRepository> _mockCachedWordRepository = new();
+ 
+            Mock<IWordServiceDb> _mockWordServiceDb = new();
 
-            //_mockCachedWordRepository.Setup(m => m.);
             Mock<ICachedWordService> _mockCachedWordService = new();
+            _mockCachedWordService.Setup(m => m.SearchCachedWord(word)).Returns(cachedWords);
+            _mockCachedWordService.Setup(m => m.GetCachedAnagrams(word)).Returns(words);
 
-           //_wordController = new(_mockWordRepository.Object, _mockCachedWordRepository.Object, _mockAnagramSolverService.Object,
-           //    _mockCachedWordService.Object);
+            _wordController = new(_mockAnagramSolverService.Object, _mockCachedWordService.Object, _mockWordServiceDb.Object);
         }
 
         [TestCase(1, 30)]

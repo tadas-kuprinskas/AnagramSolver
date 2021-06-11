@@ -138,7 +138,7 @@ namespace AnagramSolver.Database
             return words;
         }
 
-        public void AddWordsToDatabase(Word word, int id) //should I add my own words to text file in this case?
+        public void AddWordsToDatabase(Word word)
         {
             throw new NotImplementedException();
         }

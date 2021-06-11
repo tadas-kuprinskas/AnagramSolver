@@ -1,5 +1,6 @@
 ﻿using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Contracts.Interfaces;
+using AnagramSolver.Contracts.Models;
 using AnagramSolver.Database;
 using AnagramSolver.Repository;
 using Microsoft.Extensions.Options;
@@ -27,13 +28,11 @@ namespace AnagramSolver.Repository.Helpers
             //databaseWords.GetPaginatedWords(80, 20); testing
             //databaseWords.ReadAndGetDictionary(); testing
 
-            var words = fileWords.GetAllWords();
-            int id = 1;
+            var words = fileWords.GetAllWords().GroupBy(w => w.Value).Select(w => w.First()).ToList(); //for only unique words to be added to db
 
             foreach (var word in words)
             {
-                databaseWords.AddWordsToDatabase(word, id);
-                id++;
+                databaseWords.AddWordsToDatabase(word);
             }
         }
     }
