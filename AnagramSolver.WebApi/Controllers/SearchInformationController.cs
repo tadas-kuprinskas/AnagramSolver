@@ -19,10 +19,10 @@ namespace AnagramSolver.WebApi.Controllers
             _searchInformationService = searchInformationService;
         }
 
-        //[HttpGet]
-        //public IEnumerable<SearchInformation> GetAllSearchHistory()
-        //{
-        //   
-        //}
+        [HttpGet]
+        public IEnumerable<SearchInformation> GetAllSearchHistory()
+        {
+            return _searchInformationService.ReturnAllSearches();
+        }
     }
 }

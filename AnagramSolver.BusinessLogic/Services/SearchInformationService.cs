@@ -46,5 +46,10 @@ namespace AnagramSolver.BusinessLogic.Services
 
             _searchInformationRepository.AddSearchInformation(information);
         }
+
+        public IEnumerable<SearchInformation> ReturnAllSearches()
+        {
+            return _searchInformationRepository.ReturnSearchInformation();
+        }
     }
 }

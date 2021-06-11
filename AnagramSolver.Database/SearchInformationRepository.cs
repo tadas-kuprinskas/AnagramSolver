@@ -37,5 +37,37 @@ namespace AnagramSolver.Repository
 
             _sqlConnection.Close();
         }
+
+        public IEnumerable<SearchInformation> ReturnSearchInformation()
+        {
+            _sqlConnection.Open();
+
+            var insertQuery = "Select * from SearchInformation";
+
+            List<SearchInformation> searchInformation = new();
+
+            using (SqlCommand cmd = new(insertQuery, _sqlConnection))
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        searchInformation.Add(
+                            new SearchInformation()
+                            {
+                                UserIp = dataReader["UserIp"].ToString(),
+                                SearchTime = DateTime.Parse(dataReader["SearchTime"].ToString()),
+                                SearchedWord = dataReader["SearchedWord"].ToString(),
+                                Anagram = dataReader["Anagrams"].ToString()
+                            });
+                    }
+                }
+                dataReader.Close();
+            }
+            _sqlConnection.Close();
+            return searchInformation;
+        }
     }
 }

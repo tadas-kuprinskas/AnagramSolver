@@ -6,5 +6,6 @@ namespace AnagramSolver.Contracts.Interfaces
     public interface ISearchInformationService
     {
         void RecordSearchInformation(List<Word> uniqueAnagrams, string myWord);
+        IEnumerable<SearchInformation> ReturnAllSearches();
     }
 }
