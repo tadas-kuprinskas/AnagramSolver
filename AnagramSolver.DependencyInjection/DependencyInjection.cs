@@ -4,8 +4,10 @@ using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Database;
 using AnagramSolver.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.IO;
 
@@ -23,7 +25,10 @@ namespace AnagramSolver.DependencyInjection
                     //.AddScoped<IWordRepository, WordRepository>()
                     .AddScoped<IValidationService, ValidationService>()
                     .AddScoped<IClientService, AnagramClientService>()
-                    .AddHttpClient();
+                    .AddScoped<ISearchInformationService, SearchInformationService>()
+                    .AddScoped<ISearchInformationRepository, SearchInformationRepository>()
+                    .AddHttpClient()
+                    .TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
 }

@@ -57,6 +57,7 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
 
             var word = "sula";
             Mock<IAnagramSolverService> _mockAnagramSolverService = new();
+            Mock<ISearchInformationService> _mockSearchInformationService = new();
  
             Mock<IWordServiceDb> _mockWordServiceDb = new();
 
@@ -64,7 +65,8 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
             _mockCachedWordService.Setup(m => m.SearchCachedWord(word)).Returns(cachedWords);
             _mockCachedWordService.Setup(m => m.GetCachedAnagrams(word)).Returns(words);
 
-            _wordController = new(_mockAnagramSolverService.Object, _mockCachedWordService.Object, _mockWordServiceDb.Object);
+            _wordController = new(_mockAnagramSolverService.Object, _mockCachedWordService.Object, _mockWordServiceDb.Object,
+                _mockSearchInformationService.Object);
         }
 
         [TestCase(1, 30)]

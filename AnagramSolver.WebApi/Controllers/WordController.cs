@@ -21,13 +21,15 @@ namespace AnagramSolver.WebApi.Controllers
         private readonly IAnagramSolverService _anagramSolverService;
         private readonly ICachedWordService _cachedWordService;
         private readonly IWordServiceDb _wordServiceDb;
+        private readonly ISearchInformationService _searchInformationService;
 
         public WordController(IAnagramSolverService anagramSolverService, ICachedWordService cachedWordService, 
-            IWordServiceDb wordServiceDb)
+            IWordServiceDb wordServiceDb, ISearchInformationService searchInformationService)
         {
             _anagramSolverService = anagramSolverService;
             _cachedWordService = cachedWordService;
             _wordServiceDb = wordServiceDb;
+            _searchInformationService = searchInformationService;
         }
 
         [HttpGet]
@@ -38,10 +40,10 @@ namespace AnagramSolver.WebApi.Controllers
             return _wordServiceDb.GetPaginatedWords(currentPage, pageSize, foundWords, myWord); 
         }
 
-        [HttpGet("Anagrams")]
+        [HttpGet("Search")]
         public IEnumerable<string> GetUniqueAnagrams(string myWord)
         {
-            var cachedWords = _cachedWordService.SearchCachedWord(myWord);
+            var cachedWords = _cachedWordService.SearchCachedWord(myWord);       
 
             List<Word> anagrams;
 
@@ -54,6 +56,9 @@ namespace AnagramSolver.WebApi.Controllers
             {
                 anagrams = _cachedWordService.GetCachedAnagrams(myWord);
             }
+
+            _searchInformationService.RecordSearchInformation(anagrams, myWord);
+
             return anagrams.Select(w => w.Value);
         }
     }

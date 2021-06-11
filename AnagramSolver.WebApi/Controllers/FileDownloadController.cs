@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace AnagramSolver.WebApi.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class FileDownloadController : Controller
     {
         private readonly BusinessLogic.Utilities.Settings _options;

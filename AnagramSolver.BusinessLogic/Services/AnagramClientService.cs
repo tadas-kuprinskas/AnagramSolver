@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace AnagramSolver.BusinessLogic.Services
 {
@@ -19,12 +20,15 @@ namespace AnagramSolver.BusinessLogic.Services
         private readonly Settings _options;
         private readonly IHttpClientFactory _clientFactory;
         private readonly IValidationService _validationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AnagramClientService(IOptions<Settings> options, IValidationService validationService, IHttpClientFactory clientFactory)
+        public AnagramClientService(IOptions<Settings> options, IHttpClientFactory clientFactory, 
+            IValidationService validationService, IHttpContextAccessor httpContextAccessor)
         {
             _options = options.Value;
             _clientFactory = clientFactory;
             _validationService = validationService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<string>> SendGetAnagramsRequestAsync(string myWord)
@@ -44,6 +48,13 @@ namespace AnagramSolver.BusinessLogic.Services
                 anagrams = JsonSerializer.Deserialize<List<string>>(contentString);
             }
             return anagrams;
+        }
+
+        public string GetUserIP()
+        {
+            string ip = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+
+            return ip;
         }
     }
 }
