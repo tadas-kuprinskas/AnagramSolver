@@ -24,7 +24,6 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
         [SetUp]
         public void Setup()
         {
-            var fixture = new Fixture();
             _words = new List<string>() { "sportas", "vedasi", "sula", "veidas", "alus", "praktika", "veidas"};
 
             _options = new() { FilePath = "AnagramSolver.Contracts/Data/zodynas.txt" };

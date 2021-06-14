@@ -7,5 +7,6 @@ namespace AnagramSolver.Contracts.Interfaces
     {
         void RecordSearchInformation(List<Word> uniqueAnagrams, string myWord);
         IEnumerable<SearchInformation> ReturnAllSearches();
+        string GetUserIP();
     }
 }

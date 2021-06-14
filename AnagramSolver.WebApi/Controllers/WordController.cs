@@ -43,11 +43,11 @@ namespace AnagramSolver.WebApi.Controllers
         [HttpGet("Search")]
         public IEnumerable<string> GetUniqueAnagrams(string myWord)
         {
-            var cachedWords = _cachedWordService.SearchCachedWord(myWord);       
+            var cachedWord = _cachedWordService.SearchCachedWord(myWord);       
 
             List<Word> anagrams;
 
-            if (cachedWords.Count == 0)
+            if (cachedWord.Id == 0)
             {
                  anagrams = _anagramSolverService.GetUniqueAnagrams(myWord).ToList();
                 _cachedWordService.InsertCachedWordIntoTables(myWord, anagrams);

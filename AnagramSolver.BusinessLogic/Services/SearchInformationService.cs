@@ -1,5 +1,6 @@
 ﻿using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,22 +13,32 @@ namespace AnagramSolver.BusinessLogic.Services
 {
     public class SearchInformationService : ISearchInformationService
     {
-        private readonly IClientService _clientService;
         private readonly ISearchInformationRepository _searchInformationRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SearchInformationService(IClientService clientService, ISearchInformationRepository searchInformationRepository)
+        public SearchInformationService(ISearchInformationRepository searchInformationRepository, IHttpContextAccessor httpContextAccessor)
         {
-            _clientService = clientService;
             _searchInformationRepository = searchInformationRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         private SearchInformation GetSearchInformation(List<Word> uniqueAnagrams, string myWord)
         {
-            var userIp = _clientService.GetUserIP();
+            var userIp = GetUserIP();
             var searchTime = DateTime.Now;
 
-            var anagrams = uniqueAnagrams.Select(w => w.Value);
-            var anagramsToString = anagrams.Aggregate((current, next) => current + ", " + next);
+            string anagramsToString;
+            IEnumerable<string> anagrams;
+
+            if (uniqueAnagrams.Any())
+            {
+                anagrams = uniqueAnagrams.Select(w => w.Value);
+                anagramsToString = anagrams.Aggregate((current, next) => current + ", " + next);
+            }
+            else
+            {
+                anagramsToString = string.Empty;
+            }
 
             SearchInformation searchInformation = new()
             {
@@ -50,6 +61,13 @@ namespace AnagramSolver.BusinessLogic.Services
         public IEnumerable<SearchInformation> ReturnAllSearches()
         {
             return _searchInformationRepository.ReturnSearchInformation();
+        }
+
+        public string GetUserIP()
+        {
+            string ip = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+
+            return ip;
         }
     }
 }

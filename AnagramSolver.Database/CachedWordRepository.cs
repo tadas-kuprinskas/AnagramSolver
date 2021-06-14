@@ -22,28 +22,28 @@ namespace AnagramSolver.Repository
             _sqlConnection = new SqlConnection(_options.ConnectionString);
         }
 
-        public List<CachedWord> SearchCachedWord(string myWord)
+        public CachedWord SearchCachedWord(string myWord)
         {
             _sqlConnection.Open();
             var sqlQuery = "Select * from Cached_Word where Word_Value = @myWord";
             SqlCommand command = new(sqlQuery, _sqlConnection);
             command.Parameters.Add(new SqlParameter("@myWord", myWord));
             SqlDataReader dataReader = command.ExecuteReader();
-            var cachedWords = new List<CachedWord>();
+            var cachedWord = new CachedWord();
             if (dataReader.HasRows)
             {
                 while (dataReader.Read())
                 {
-                    cachedWords.Add(new CachedWord()
+                    cachedWord = new CachedWord()
                     {
                         Value = dataReader["Word_Value"].ToString(),
                         Id = int.Parse(dataReader["Id"].ToString())
-                    });
+                    };
                 }
             }
             dataReader.Close();
             _sqlConnection.Close();
-            return cachedWords;
+            return cachedWord;
         }
 
         public int AddCachedWord(string myWord)

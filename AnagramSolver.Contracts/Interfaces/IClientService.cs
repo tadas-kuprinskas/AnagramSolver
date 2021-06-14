@@ -7,6 +7,5 @@ namespace AnagramSolver.Contracts.Interfaces
     public interface IClientService
     {
         Task<IEnumerable<string>> SendGetAnagramsRequestAsync(string myWord);
-        string GetUserIP();
     }
 }

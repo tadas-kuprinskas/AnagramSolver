@@ -29,12 +29,6 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
                 Value = "sula"
             };
 
-            CachedWord secondCachedWord = new()
-            {
-                Id = 2,
-                Value = "veidas"
-            };
-
             Word firstWord = new()
             {
                 Id = 1,
@@ -51,7 +45,6 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
                 PartOfSpeech = "dkt"
             };
 
-            List<CachedWord> cachedWords = new() { firstCachedWord, secondCachedWord };
             List<Word> words = new() { firstWord, secondWord };
 
 
@@ -62,7 +55,7 @@ namespace AnagramSolver.Tests.AnagramSolver.WebApi.Controllers
             Mock<IWordServiceDb> _mockWordServiceDb = new();
 
             Mock<ICachedWordService> _mockCachedWordService = new();
-            _mockCachedWordService.Setup(m => m.SearchCachedWord(word)).Returns(cachedWords);
+            _mockCachedWordService.Setup(m => m.SearchCachedWord(word)).Returns(firstCachedWord);
             _mockCachedWordService.Setup(m => m.GetCachedAnagrams(word)).Returns(words);
 
             _wordController = new(_mockAnagramSolverService.Object, _mockCachedWordService.Object, _mockWordServiceDb.Object,

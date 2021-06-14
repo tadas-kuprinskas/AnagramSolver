@@ -37,11 +37,6 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
             var fixture = new Fixture();
 
-            var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-            var ipAddress = fixture.Create<IPAddress>();
-
-            mockHttpContextAccessor.Setup(p => p.HttpContext.Connection.RemoteIpAddress).Returns(ipAddress);
-
             mockHttpMessageHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage
@@ -56,7 +51,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
 
             var mockValidationService = new Mock<IValidationService>();
 
-            _anagramClientService = new(mockOptions.Object, mockHttpClient.Object, mockValidationService.Object, mockHttpContextAccessor.Object);
+            _anagramClientService = new(mockOptions.Object, mockHttpClient.Object, mockValidationService.Object);
         }
 
         [TestCase("veidas")]
@@ -74,14 +69,6 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
 
             wordList.ShouldNotBeNull();
             wordList.ShouldBeOfType<List<string>>();
-        }
-
-        [Test]
-        public void GetUserIp_GivenCorrectValues_ReturnsCorrectTypeResult()
-        {
-            var ip = _anagramClientService.GetUserIP();
-            ip.ShouldNotBeNullOrEmpty();
-            ip.ShouldBeOfType<string>();
         }
     }
 }

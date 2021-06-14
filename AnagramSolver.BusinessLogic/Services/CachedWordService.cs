@@ -28,7 +28,7 @@ namespace AnagramSolver.BusinessLogic.Services
             }
         }
 
-        public List<CachedWord> SearchCachedWord(string myWord)
+        public CachedWord SearchCachedWord(string myWord)
         {
             return _cachedWordRepository.SearchCachedWord(myWord);
         }

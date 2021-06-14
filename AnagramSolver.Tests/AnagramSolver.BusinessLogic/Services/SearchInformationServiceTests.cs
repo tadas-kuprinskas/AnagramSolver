@@ -2,12 +2,14 @@
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
 using AutoFixture;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,10 +35,13 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             var allSearches = fixture.CreateMany<SearchInformation>(4);
             _mockSearchInformationRepository.Setup(m => m.ReturnSearchInformation()).Returns(allSearches);
 
-            Mock<IClientService> _mockClientService = new();
+            var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
+            var ipAddress = fixture.Create<IPAddress>();
 
-            _mockClientService.Setup(m => m.GetUserIP()).Returns("1");
-            _searchInformationService = new(_mockClientService.Object, _mockSearchInformationRepository.Object);
+            mockHttpContextAccessor.Setup(p => p.HttpContext.Connection.RemoteIpAddress).Returns(ipAddress);
+
+            //_mockClientService.Setup(m => m.GetUserIP()).Returns("1");
+            _searchInformationService = new(_mockSearchInformationRepository.Object, mockHttpContextAccessor.Object);
         }
 
         [Test]
@@ -65,6 +70,14 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
 
             searchList.ShouldBeEmpty();
             searchList.Count().ShouldBe(0);
+        }
+
+        [Test]
+        public void GetUserIp_GivenCorrectValues_ReturnsCorrectTypeResult()
+        {
+            var ip = _searchInformationService.GetUserIP();
+            ip.ShouldNotBeNullOrEmpty();
+            ip.ShouldBeOfType<string>();
         }
     }
 }

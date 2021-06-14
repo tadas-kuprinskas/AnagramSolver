@@ -28,12 +28,12 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             var fixture = new Fixture();
 
             _anagrams = fixture.CreateMany<Word>(8).ToList();
-            var cachedWords = fixture.CreateMany<CachedWord>(5).ToList();
+            var cachedWord = fixture.Create<CachedWord>();
             var words = fixture.CreateMany<Word>(8).ToList();
 
             _mockCachedWordsRepository = new();
             _mockCachedWordsRepository.Setup(m => m.AddCachedWord(_myWord)).Returns(2);
-            _mockCachedWordsRepository.Setup(m => m.SearchCachedWord(_myWord)).Returns(cachedWords);
+            _mockCachedWordsRepository.Setup(m => m.SearchCachedWord(_myWord)).Returns(cachedWord);
             _mockCachedWordsRepository.Setup(m => m.GetCachedAnagrams(_myWord)).Returns(words);
 
             _cachedWordService = new(_mockCachedWordsRepository.Object);
@@ -52,10 +52,10 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
         [Test]
         public void SearchCachedWord_GivenCorrectValues_ReturnsCorrectTypeResult()
         {
-            var cachedWords = _cachedWordService.SearchCachedWord(_myWord);
+            var cachedWord = _cachedWordService.SearchCachedWord(_myWord);
 
-            cachedWords.ShouldNotBeNull();
-            cachedWords.ShouldBeOfType<List<CachedWord>>();
+            cachedWord.ShouldNotBeNull();
+            cachedWord.ShouldBeOfType<CachedWord>();
         }
 
         [Test]

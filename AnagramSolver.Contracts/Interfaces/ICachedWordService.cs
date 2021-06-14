@@ -6,7 +6,7 @@ namespace AnagramSolver.Contracts.Interfaces
     public interface ICachedWordService
     {
         void InsertCachedWordIntoTables(string myWord, List<Word> anagrams);
-        List<CachedWord> SearchCachedWord(string myWord);
+        CachedWord SearchCachedWord(string myWord);
         List<Word> GetCachedAnagrams(string myWord);
     }
 }

@@ -86,7 +86,7 @@ namespace AnagramSolver.Database
 
             var pagenumber = currentPage > totalPages ? totalPages : currentPage;
 
-            var items = words.Skip((pagenumber - 1) * itemsNumber).Take(itemsNumber).ToList().Where(w => w.Contains(myWord));
+            var items = words.Skip((pagenumber - 1) * itemsNumber).Take(itemsNumber).Where(w => w.Contains(myWord));
 
             List<Word> wordList = new();
 
