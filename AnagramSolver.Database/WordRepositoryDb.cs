@@ -206,5 +206,10 @@ namespace AnagramSolver.Repository
             _sqlConnection.Close();
             return words;
         }
+
+        public Word GetWord(string myWord)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

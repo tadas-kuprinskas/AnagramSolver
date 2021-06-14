@@ -47,7 +47,7 @@ namespace AnagramSolver.WebApi.Controllers
 
             List<Word> anagrams;
 
-            if (cachedWord.Id == 0)
+            if (cachedWord == null)
             {
                  anagrams = _anagramSolverService.GetUniqueAnagrams(myWord).ToList();
                 _cachedWordService.InsertCachedWordIntoTables(myWord, anagrams);

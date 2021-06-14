@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AnagramSolver.EF.DatabaseFirst.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace AnagramSolver.WebApi
 {
@@ -38,6 +40,8 @@ namespace AnagramSolver.WebApi
 
             services.Configure<Settings>(Configuration.GetSection(
                                         Settings.HandlingOptions));
+
+            services.AddDbContext<DataContext>(d => d.UseSqlServer("Server=.;Database=AnagramSolver;Trusted_Connection=True;"));
 
             services.AddControllers();
 

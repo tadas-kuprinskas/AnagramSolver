@@ -46,7 +46,7 @@ namespace AnagramSolver.Repository
             return cachedWord;
         }
 
-        public int AddCachedWord(string myWord)
+        public CachedWord AddCachedWord(string myWord)
         {
             _sqlConnection.Open();
             var insertQuery = "Insert into Cached_Word (Word_Value) output Inserted.Id values (@myWord)";
@@ -55,16 +55,18 @@ namespace AnagramSolver.Repository
             var Id = int.Parse(command.ExecuteScalar().ToString());
             _sqlConnection.Close();
 
-            return Id;
+            var cachedWord = new CachedWord() { Value = myWord, Id = Id };
+
+            return cachedWord;
         }
 
-        public void AddToAdditionalTable(int wordId, int cachedWordId)
+        public void AddToAdditionalTable(Word word, CachedWord cachedWord)
         {
             _sqlConnection.Open();
             var sqlQueryinsert = "Insert into Word_CachedWord_Additional (Word_Id, CachedWord_Id) values (@WordId, @CachedWordId)";
             SqlCommand command = new (sqlQueryinsert, _sqlConnection);
-            command.Parameters.Add(new SqlParameter("@WordId", wordId));
-            command.Parameters.Add(new SqlParameter("@CachedWordId", cachedWordId));
+            command.Parameters.Add(new SqlParameter("@WordId", word.Id));
+            command.Parameters.Add(new SqlParameter("@CachedWordId", cachedWord.Id));
             command.ExecuteNonQuery();
             _sqlConnection.Close();
         }

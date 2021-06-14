@@ -56,8 +56,7 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
             var uniqueWord = _fixture.Create<string>(); 
             var id = _cachedWordRepository.AddCachedWord(uniqueWord);
 
-            id.ShouldNotBe(0);
-            id.ShouldBeOfType<int>();
+            id.ShouldBeOfType<CachedWord>();
         }
 
         [Test]

@@ -18,25 +18,47 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
     {
         private CachedWordService _cachedWordService;
         private Mock<ICachedWordRepository> _mockCachedWordsRepository;
+        private Mock<IWordRepository> _mockWordRepository;
         private string _myWord;
         private List<Word> _anagrams;
+        private Word _word;
+        private CachedWord _cachedWord;
 
         [SetUp]
         public void Setup()
         {
             _myWord = "sula";
+
+            _cachedWord = new()
+            {
+                Id = 1,
+                Value = "sula"
+            };
+
+            _word = new()
+            {
+                Id = 1,
+                OrderedValue = "alsu",
+                PartOfSpeech = "dkt",
+                Value = "sula"
+            };
+
             var fixture = new Fixture();
 
             _anagrams = fixture.CreateMany<Word>(8).ToList();
+            _anagrams.Add(_word);
             var cachedWord = fixture.Create<CachedWord>();
             var words = fixture.CreateMany<Word>(8).ToList();
 
+            _mockWordRepository = new();
+
             _mockCachedWordsRepository = new();
-            _mockCachedWordsRepository.Setup(m => m.AddCachedWord(_myWord)).Returns(2);
+            _mockCachedWordsRepository.Setup(m => m.AddCachedWord(_myWord)).Returns(_cachedWord);
             _mockCachedWordsRepository.Setup(m => m.SearchCachedWord(_myWord)).Returns(cachedWord);
             _mockCachedWordsRepository.Setup(m => m.GetCachedAnagrams(_myWord)).Returns(words);
+            _mockWordRepository.Setup(m => m.GetWord(_myWord)).Returns(_word);
 
-            _cachedWordService = new(_mockCachedWordsRepository.Object);
+            _cachedWordService = new(_mockCachedWordsRepository.Object, _mockWordRepository.Object);
         }
 
         [Test]
@@ -44,9 +66,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
         {
             _cachedWordService.InsertCachedWordIntoTables(_myWord, _anagrams);
 
-            var id = _anagrams.FirstOrDefault().Id;
-
-            _mockCachedWordsRepository.Verify(m => m.AddToAdditionalTable(id, 2), Times.AtLeastOnce);
+            _mockCachedWordsRepository.Verify(m => m.AddToAdditionalTable(_word, _cachedWord), Times.AtLeastOnce);
         }
 
         [Test]

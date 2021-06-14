@@ -12,25 +12,30 @@ namespace AnagramSolver.BusinessLogic.Services
     public class CachedWordService : ICachedWordService
     {
         private readonly ICachedWordRepository _cachedWordRepository;
+        private readonly IWordRepository _wordRepository;
 
-        public CachedWordService(ICachedWordRepository cachedWordRepository)
+        public CachedWordService(ICachedWordRepository cachedWordRepository, IWordRepository wordRepository)
         {
             _cachedWordRepository = cachedWordRepository;
+            _wordRepository = wordRepository;
         }
 
         public void InsertCachedWordIntoTables(string myWord, List<Word> anagrams)
         {
-            var id = _cachedWordRepository.AddCachedWord(myWord);
+            var cachedWord = _cachedWordRepository.AddCachedWord(myWord);
 
             foreach (var anagram in anagrams)
             {
-                _cachedWordRepository.AddToAdditionalTable(anagram.Id, id);
+                var word = _wordRepository.GetWord(anagram.Value);
+
+                _cachedWordRepository.AddToAdditionalTable(word, cachedWord);
             }
         }
 
         public CachedWord SearchCachedWord(string myWord)
         {
-            return _cachedWordRepository.SearchCachedWord(myWord);
+            var cachedWord = _cachedWordRepository.SearchCachedWord(myWord);
+            return cachedWord;
         }
 
         public List<Word> GetCachedAnagrams(string myWord)
