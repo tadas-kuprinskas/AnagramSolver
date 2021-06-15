@@ -53,8 +53,10 @@ namespace AnagramSolver.Repository
             return words;
         }
 
-        public IEnumerable<Word> GetPaginatedWords(int currentPage, int pageSize, IEnumerable<string> words, string myWord)
+        public IEnumerable<Word> GetPaginatedWords(int currentPage, int pageSize, string myWord)
         {
+            var words = SearchForWords(myWord);
+
             var itemsNumber = 5;
 
             currentPage = (currentPage == 0) ? 1 : currentPage;

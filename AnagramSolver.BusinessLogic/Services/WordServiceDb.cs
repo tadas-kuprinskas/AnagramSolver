@@ -21,9 +21,9 @@ namespace AnagramSolver.BusinessLogic.Services
             return _wordRepository.SearchForWords(myWord).Select(w => w.Value);
         }
 
-        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize, IEnumerable<string> words, string myWord)
+        public IEnumerable<string> GetPaginatedWords(int currentPage, int pageSize, string myWord)
         {
-            return _wordRepository.GetPaginatedWords(currentPage, pageSize, words, myWord).Select(w => w.Value);
+            return _wordRepository.GetPaginatedWords(currentPage, pageSize, myWord).Select(w => w.Value);
         }
     }
 }

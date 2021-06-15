@@ -29,35 +29,28 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
             return _context.Words.ToList();
         }
 
-        public IEnumerable<Word> GetPaginatedWords(int currentPage, int pageSize, IEnumerable<string> words, string myWord)
+        public IEnumerable<Word> GetPaginatedWords(int currentPage, int pageSize, string myWord)
         {
+            var foundWords = _context.Words.Where(w => w.Value.Contains(myWord));
+
             var itemsNumber = 50;
 
-            int count = words.Count();
+            int count = foundWords.Count();
+
             itemsNumber = pageSize < 1 ? itemsNumber : pageSize;
 
             var totalPages = (int)Math.Ceiling(count / (double)itemsNumber);
 
-            var pagenumber = currentPage > totalPages ? totalPages : currentPage;
+            var pageNumber = currentPage > totalPages ? totalPages : currentPage;
 
-            var items = words.Skip((pagenumber - 1) * itemsNumber).Take(itemsNumber).Where(w => w.Contains(myWord));
-
-            List<Word> wordList = new();
-
-            foreach (var item in items)
-            {
-                wordList.Add(
-                    new Word()
-                    {
-                        Value = item
-                    });
-            }
+            var items = foundWords.Skip((pageNumber - 1) * itemsNumber).Take(itemsNumber);
 
             if (!items.Any())
             {
                 return Enumerable.Empty<Word>();
             }
-            return wordList;
+
+            return items;
         }
 
         public Dictionary<string, HashSet<Word>> ReadAndGetDictionary()
