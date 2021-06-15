@@ -7,5 +7,6 @@ namespace AnagramSolver.Contracts.Interfaces
     {
         void AddSearchInformation(SearchInformation searchInformation);
         IEnumerable<SearchInformation> ReturnSearchInformation();
+        void SaveChanges();
     }
 }

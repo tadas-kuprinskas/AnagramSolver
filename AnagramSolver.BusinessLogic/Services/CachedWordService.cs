@@ -30,6 +30,8 @@ namespace AnagramSolver.BusinessLogic.Services
 
                 _cachedWordRepository.AddToAdditionalTable(word, cachedWord);
             }
+
+            _wordRepository.SaveChanges();
         }
 
         public CachedWord SearchCachedWord(string myWord)

@@ -211,5 +211,10 @@ namespace AnagramSolver.Repository
         {
             throw new NotImplementedException();
         }
+
+        public void SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -56,6 +56,8 @@ namespace AnagramSolver.BusinessLogic.Services
             var information = GetSearchInformation(uniqueAnagrams, myWord);
 
             _searchInformationRepository.AddSearchInformation(information);
+
+            _searchInformationRepository.SaveChanges();
         }
 
         public IEnumerable<SearchInformation> ReturnAllSearches()

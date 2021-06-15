@@ -22,7 +22,6 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
         {
             var sortedWord = String.Concat(word.Value.ToLower().OrderBy(c => c));
             _context.Words.Add(word);
-            _context.SaveChanges();
         }
 
         public IEnumerable<Word> GetAllWords()
@@ -115,6 +114,11 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
             var word = _context.Words.First(x => x.Value == wordToFind);
 
             return word;
+        }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
         }
     }
 }

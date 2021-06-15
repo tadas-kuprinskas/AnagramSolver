@@ -156,5 +156,10 @@ namespace AnagramSolver.Database
         {
             throw new NotImplementedException();
         }
+
+        public void SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

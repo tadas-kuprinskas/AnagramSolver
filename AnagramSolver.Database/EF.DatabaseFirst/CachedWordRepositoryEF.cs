@@ -26,7 +26,6 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
             };
 
             _context.Cached_Words.Add(cachedWord);
-            _context.SaveChanges();
 
             return cachedWord;
         }
@@ -39,7 +38,6 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
                 CachedWord = cachedWord
             };
             _context.Word_CachedWord_Additionals.Add(additionalItem);
-            _context.SaveChanges();
         }
 
         public List<Word> GetCachedAnagrams(string myWord)

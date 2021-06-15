@@ -12,5 +12,6 @@ namespace AnagramSolver.Contracts.Interfaces
         void AddWordsToDatabase(Word word);
         IEnumerable<Word> SearchForWords(string myWord);
         Word GetWord(string myWord);
+        void SaveChanges();
     }
 }

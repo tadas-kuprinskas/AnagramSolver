@@ -69,5 +69,10 @@ namespace AnagramSolver.Repository
             _sqlConnection.Close();
             return searchInformation;
         }
+
+        public void SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

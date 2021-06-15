@@ -44,6 +44,8 @@ namespace AnagramSolver.Repository.Helpers
             {
                 databaseWordsEF.AddWordsToDatabase(word);
             }
+
+            databaseWordsEF.SaveChanges();
         }
     }
 }

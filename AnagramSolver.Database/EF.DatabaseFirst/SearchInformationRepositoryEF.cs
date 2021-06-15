@@ -21,12 +21,16 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
         public void AddSearchInformation(SearchInformation searchInformation)
         {
             _context.SearchInformations.Add(searchInformation);
-            _context.SaveChanges();
         }
 
         public IEnumerable<SearchInformation> ReturnSearchInformation()
         {
             return _context.SearchInformations.ToList();
+        }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
         }
     }
 }
