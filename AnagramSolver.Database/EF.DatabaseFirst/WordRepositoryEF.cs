@@ -110,9 +110,9 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
             return words;
         }
 
-        public Word GetWord(string myWord)
+        public Word GetWord(string wordToFind)
         {
-            var word = _context.Words.First(x => x.Value == myWord);
+            var word = _context.Words.First(x => x.Value == wordToFind);
 
             return word;
         }
