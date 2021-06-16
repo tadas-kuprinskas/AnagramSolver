@@ -23,7 +23,7 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
         [SetUp]
         public void Setup()
         {
-            _options = new() { FilePath = "AnagramSolver.Contracts/Data/zodynas.txt" };
+            _options = new() { FilePath = "Anagram_Solver.Contracts/Data/zodynas.txt" };
 
             var mockOptions = new Mock<IOptions<Settings>>();
             mockOptions.Setup(ap => ap.Value).Returns(_options);

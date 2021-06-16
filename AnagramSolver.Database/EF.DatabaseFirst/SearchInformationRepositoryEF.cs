@@ -1,5 +1,6 @@
 ﻿using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
+using AnagramSolver.EF.CodeFirst.Data;
 using AnagramSolver.EF.DatabaseFirst.Data;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
 {
     public class SearchInformationRepositoryEF : ISearchInformationRepository
     {
-        private readonly AnagramSolverContext _context;
+        private readonly AnagramSolverCodeFirstContext _context;
 
-        public SearchInformationRepositoryEF(AnagramSolverContext context)
+        public SearchInformationRepositoryEF(AnagramSolverCodeFirstContext context)
         {
             _context = context;
         }

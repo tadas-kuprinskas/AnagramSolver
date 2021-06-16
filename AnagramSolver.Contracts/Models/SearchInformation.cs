@@ -10,7 +10,7 @@ namespace AnagramSolver.Contracts.Models
     {
         public int Id { get; set; }
         public string UserIp { get; set; }
-        public DateTime? SearchTime { get; set; }
+        public DateTime SearchTime { get; set; }
         public string SearchedWord { get; set; }
         public string Anagram { get; set; }
     }

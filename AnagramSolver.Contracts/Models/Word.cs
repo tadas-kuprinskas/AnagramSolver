@@ -20,5 +20,15 @@ namespace AnagramSolver.Contracts.Models
         public string OrderedValue { get; set; }
 
         public virtual ICollection<WordCachedWordAdditional> WordCachedWordAdditionals { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return this.Value.Equals(((Word)obj).Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Value.GetHashCode();
+        }
     }
 }

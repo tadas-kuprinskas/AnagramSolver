@@ -1,5 +1,6 @@
 ﻿using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Contracts.Models;
+using AnagramSolver.EF.CodeFirst.Data;
 using AnagramSolver.EF.DatabaseFirst.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,9 +13,9 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
 {
     public class CachedWordRepositoryEF : ICachedWordRepository
     {
-        private readonly AnagramSolverContext _context;
+        private readonly AnagramSolverCodeFirstContext _context;
 
-        public CachedWordRepositoryEF(AnagramSolverContext context)
+        public CachedWordRepositoryEF(AnagramSolverCodeFirstContext context)
         {
             _context = context;
         }

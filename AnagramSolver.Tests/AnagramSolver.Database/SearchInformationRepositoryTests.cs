@@ -36,7 +36,7 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
 
             _fixture = new();
 
-            _options = new() { ConnectionString = "Server=.;Database=AnagramSolver;Trusted_Connection=True;", NumberOfAnagrams = 10 };
+            _options = new() { ConnectionString = "Server=.;Database=Anagram_Solver;Trusted_Connection=True;", NumberOfAnagrams = 10 };
 
             SqlConnection _sqlConnection = new(_options.ConnectionString);
 

@@ -4,7 +4,9 @@ using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Console;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.DependencyInjection;
+using AnagramSolver.EF.CodeFirst.Data;
 using AnagramSolver.Repository.Helpers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -38,6 +40,8 @@ namespace AnagramSolver
 
             services.Configure<Settings>(configuration.GetSection(
                                         Settings.HandlingOptions));
+
+            services.AddDbContext<AnagramSolverCodeFirstContext>(d => d.UseSqlServer("Server=.;Database=Anagram_Solver;Trusted_Connection=True;"));
         }
 
         private static AnagramSolverCLI GetAnagramSolverCLI()

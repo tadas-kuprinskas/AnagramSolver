@@ -40,7 +40,6 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
 
             mockHttpContextAccessor.Setup(p => p.HttpContext.Connection.RemoteIpAddress).Returns(ipAddress);
 
-            //_mockClientService.Setup(m => m.GetUserIP()).Returns("1");
             _searchInformationService = new(_mockSearchInformationRepository.Object, mockHttpContextAccessor.Object);
         }
 
