@@ -30,10 +30,10 @@ namespace AnagramSolver.Repository.Helpers
             IWordRepository fileWords = new WordRepository(options);
 
             var services = new ServiceCollection();
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(settings.ConnectionString));
+            services.AddDbContext<AnagramSolverContext>(options => options.UseSqlServer(settings.ConnectionString));
             var serviceProvider = services.BuildServiceProvider();
 
-            IWordRepository databaseWordsEF = new WordRepositoryEF(serviceProvider.GetService<DataContext>());
+            IWordRepository databaseWordsEF = new WordRepositoryEF(serviceProvider.GetService<AnagramSolverContext>());
 
             //databaseWords.GetPaginatedWords(80, 20); testing
             //databaseWords.ReadAndGetDictionary(); testing

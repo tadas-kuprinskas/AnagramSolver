@@ -11,9 +11,9 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
 {
     public class SearchInformationRepositoryEF : ISearchInformationRepository
     {
-        private readonly DataContext _context;
+        private readonly AnagramSolverContext _context;
 
-        public SearchInformationRepositoryEF(DataContext context)
+        public SearchInformationRepositoryEF(AnagramSolverContext context)
         {
             _context = context;
         }

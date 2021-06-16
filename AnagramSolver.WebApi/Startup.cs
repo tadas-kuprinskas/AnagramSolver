@@ -41,7 +41,7 @@ namespace AnagramSolver.WebApi
             services.Configure<Settings>(Configuration.GetSection(
                                         Settings.HandlingOptions));
 
-            services.AddDbContext<DataContext>(d => d.UseSqlServer("Server=.;Database=AnagramSolver;Trusted_Connection=True;"));
+            services.AddDbContext<AnagramSolverContext>(d => d.UseSqlServer("Server=.;Database=AnagramSolver;Trusted_Connection=True;"));
 
             services.AddControllers();
 

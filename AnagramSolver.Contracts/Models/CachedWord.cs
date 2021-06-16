@@ -8,7 +8,14 @@ namespace AnagramSolver.Contracts.Models
 {
     public class CachedWord
     {
+        public CachedWord()
+        {
+            WordCachedWordAdditionals = new HashSet<WordCachedWordAdditional>();
+        }
+
         public int Id { get; set; }
         public string Value { get; set; }
+
+        public virtual ICollection<WordCachedWordAdditional> WordCachedWordAdditionals { get; set; }
     }
 }

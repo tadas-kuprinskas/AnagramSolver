@@ -26,7 +26,7 @@ namespace AnagramSolver.Repository
 
         public IEnumerable<Word> GetAllWords()
         {
-            var query = "Select * from Word";
+            var query = "Select * from Words";
 
             _sqlConnection.Open();
 
@@ -55,26 +55,16 @@ namespace AnagramSolver.Repository
 
         public IEnumerable<Word> GetPaginatedWords(int currentPage, int pageSize, string myWord)
         {
-            var words = SearchForWords(myWord);
-
-            var itemsNumber = 5;
-
-            currentPage = (currentPage == 0) ? 1 : currentPage;
-
-            int count = words.Count();
-            itemsNumber = pageSize < 1 ? itemsNumber : pageSize;
-            var totalPages = (int)Math.Ceiling(count / (double)itemsNumber);
-            var pageNumber = currentPage > totalPages ? totalPages : currentPage;
-            var firstWord = (pageNumber - 1) * itemsNumber;
+            var firstWord = (currentPage - 1) * pageSize;
 
             _sqlConnection.Open();
 
-            var query = "Select * from Word where Value like @myWord ORDER BY (Value) offset @firstWord rows fetch next @itemsNumber rows only";
+            var query = "Select * from Words where Value like @myWord ORDER BY (Value) offset @firstWord rows fetch next @itemsNumber rows only";
 
             SqlCommand cmd = new(query, _sqlConnection);
             cmd.Parameters.Add(new SqlParameter("myWord", myWord + "%"));
             cmd.Parameters.Add(new SqlParameter("firstWord", firstWord));
-            cmd.Parameters.Add(new SqlParameter("itemsNumber", itemsNumber));
+            cmd.Parameters.Add(new SqlParameter("itemsNumber", pageSize));
 
             SqlDataReader dataReader = cmd.ExecuteReader();
             List<Word> foundWords = new();
@@ -100,7 +90,7 @@ namespace AnagramSolver.Repository
 
         public void AddWordsToDatabase(Word word)
         {
-            var insertQuery = "Insert into Word (Value, PartOfSpeech, OrderedValue)" +
+            var insertQuery = "Insert into Words (Value, PartOfSpeech, OrderedValue)" +
                               "VALUES(@Value, @PartOfSpeech, @OrderedValue)";
                 
 
@@ -121,7 +111,7 @@ namespace AnagramSolver.Repository
 
         public Dictionary<string, HashSet<Word>> ReadAndGetDictionary()
         {
-            var query = "Select * from Word";
+            var query = "Select * from Words";
 
             _sqlConnection.Open();
 
@@ -178,7 +168,7 @@ namespace AnagramSolver.Repository
 
         public IEnumerable<Word> SearchForWords(string myWord)
         {
-            var query = "Select * from Word where Value like @myWord";
+            var query = "Select * from Words where Value like @myWord";
 
             _sqlConnection.Open();
 

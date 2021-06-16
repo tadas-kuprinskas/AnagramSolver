@@ -17,10 +17,12 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.StaticHelpers
         [Test]
         public void MapToWord_GivenPropertyValues_ReturnsWordWithCorrectProperties()
         {
-            var fixture = new Fixture();
-            fixture.Customize<Word>(b => b.With(p => p.Value, "sula").With(p => p.OrderedValue, "alsu").With(p => p.PartOfSpeech, "dkt"));
-            
-            var word = fixture.Create<Word>();
+            var word = new Word()
+            {
+                OrderedValue = "alsu",
+                PartOfSpeech = "dkt",
+                Value = "sula"              
+            };
 
             var returnedWord = Mapping.MapToWord(word.OrderedValue, word.Value, word.PartOfSpeech);
 

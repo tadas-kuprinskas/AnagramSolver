@@ -19,7 +19,6 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
         private Mock<IWordRepository> _mockWordRepository;
         private string _word;
         private IEnumerable<Word> _results;
-        private IEnumerable<string> _words;
 
         [SetUp]
         public void Setup()
@@ -44,11 +43,9 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
 
             _results = new List<Word>() { firstWord, secondWord };
 
-            _words = _results.Select(w => w.Value);
-
             _mockWordRepository = new();
             _mockWordRepository.Setup(m => m.SearchForWords(_word)).Returns(_results);
-            _mockWordRepository.Setup(m => m.GetPaginatedWords(1, 2, _words, _word)).Returns(_results);
+            _mockWordRepository.Setup(m => m.GetPaginatedWords(1, 2, _word)).Returns(_results);
 
             _wordServiceDb = new(_mockWordRepository.Object);
         }
@@ -66,7 +63,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
         public void GetPaginatedWords_GivenPageSize_ReturnsCorrectAmountOfItemsOnPage()
         {
            
-            var paginatedWords = _wordServiceDb.GetPaginatedWords(1, 2, _words, _word);
+            var paginatedWords = _wordServiceDb.GetPaginatedWords(1, 2, _word);
 
             paginatedWords.ShouldNotBeNull();
             paginatedWords.Count().ShouldBe(2);

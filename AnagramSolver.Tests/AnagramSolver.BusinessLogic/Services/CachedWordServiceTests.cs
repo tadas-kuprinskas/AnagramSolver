@@ -44,6 +44,8 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             };
 
             var fixture = new Fixture();
+            fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
+            fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
             _anagrams = fixture.CreateMany<Word>(8).ToList();
             _anagrams.Add(_word);

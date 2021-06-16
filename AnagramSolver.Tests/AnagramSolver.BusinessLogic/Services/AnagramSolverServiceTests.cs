@@ -53,6 +53,8 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             var orderedSecondWord = "aegrs";
 
             var fixture = new Fixture();
+            fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
+            fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
             fixture.Customize<Word>(w => w.With(p => p.Value, "dievas").With(p => p.OrderedValue, orderedWord));
             var firstWord = fixture.Create<Word>();
@@ -60,40 +62,22 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             fixture.Customize<Word>(w => w.With(p => p.Value, "vedasi").With(p => p.OrderedValue, orderedWord));
             var secondWord = fixture.Create<Word>();
 
-            fixture.Customize<Word>(w => w.With(p => p.Value, "vedasi").With(p => p.OrderedValue, orderedWord));
+            fixture.Customize<Word>(w => w.With(p => p.Value, "garse").With(p => p.OrderedValue, orderedSecondWord));
             var thirdWord = fixture.Create<Word>();
 
-            fixture.Customize<Word>(w => w.With(p => p.Value, "dievas").With(p => p.OrderedValue, orderedWord));
+            fixture.Customize<Word>(w => w.With(p => p.Value, "serga").With(p => p.OrderedValue, orderedSecondWord));
             var fourthWord = fixture.Create<Word>();
 
-            fixture.Customize<Word>(w => w.With(p => p.Value, "garse").With(p => p.OrderedValue, orderedSecondWord));
-            var fifthWord = fixture.Create<Word>();
-
-            fixture.Customize<Word>(w => w.With(p => p.Value, "serga").With(p => p.OrderedValue, orderedSecondWord));
-            var sixthWord = fixture.Create<Word>();
-
-            fixture.Customize<Word>(w => w.With(p => p.Value, "serga").With(p => p.OrderedValue, orderedSecondWord));
-            var seventhWord = fixture.Create<Word>();
-
-            HashSet<Word> words = new() { firstWord, secondWord, thirdWord, fourthWord, fifthWord, sixthWord, seventhWord };
+            HashSet<Word> words = new() { firstWord, secondWord, thirdWord, fourthWord };
 
             return words;
         }
 
-        [TestCase("adeisv")]
-        public void FindSingleWordAnagrams_GivenSameValueWords_ReturnsFourUniqueAnagrams(string orderedWord)
-        {
-            var anagrams = _anagramSolverService.FindSingleWordAnagrams(orderedWord);
-
-            anagrams.Count().ShouldBe(4);
-        }
-
         [TestCase("veidas")]
-        public void GetUniqueAnagrams_GivenSingleInput_ReturnsFourUniqueAnagramsOfWord(string singleWord)
+        public void GetUniqueAnagrams_GivenSingleInput_ReturnsFourAnagramsOfWord(string singleWord)
         {
             var uniqueAnagrams = _anagramSolverService.GetUniqueAnagrams(singleWord);
 
-            uniqueAnagrams.ShouldBeUnique();
             uniqueAnagrams.Count().ShouldBe(4);
         }
 
@@ -103,6 +87,8 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             var orderedSecondWord = "aimsv";
 
             Fixture fixture = new();
+            fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
+            fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
             fixture.Customize<Word>(w => w.With(p => p.Value, "savim").With(p => p.OrderedValue, orderedSecondWord));
             var firstWord = fixture.Create<Word>();
@@ -110,10 +96,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             fixture.Customize<Word>(w => w.With(p => p.Value, "visam").With(p => p.OrderedValue, orderedSecondWord));
             var secondWord = fixture.Create<Word>();
 
-            fixture.Customize<Word>(w => w.With(p => p.Value, "visam").With(p => p.OrderedValue, orderedSecondWord));
-            var thirdWord = fixture.Create<Word>();
-
-            HashSet<Word> _words = new() { firstWord, secondWord, thirdWord };
+            HashSet<Word> _words = new() { firstWord, secondWord };
 
             _dictionary.Add(orderedSecondWord, _words);
 

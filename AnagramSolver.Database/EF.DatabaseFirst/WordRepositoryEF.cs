@@ -11,9 +11,9 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
 {
     public class WordRepositoryEF : IWordRepository
     {
-        private readonly DataContext _context;
+        private readonly AnagramSolverContext _context;
 
-        public WordRepositoryEF(DataContext dataContext)
+        public WordRepositoryEF(AnagramSolverContext dataContext)
         {
             _context = dataContext;
         }
@@ -31,19 +31,9 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
 
         public IEnumerable<Word> GetPaginatedWords(int currentPage, int pageSize, string myWord)
         {
-            var foundWords = _context.Words.Where(w => w.Value.Contains(myWord));
-
-            var itemsNumber = 50;
-
-            int count = foundWords.Count();
-
-            itemsNumber = pageSize < 1 ? itemsNumber : pageSize;
-
-            var totalPages = (int)Math.Ceiling(count / (double)itemsNumber);
-
-            var pageNumber = currentPage > totalPages ? totalPages : currentPage;
-
-            var items = foundWords.Skip((pageNumber - 1) * itemsNumber).Take(itemsNumber);
+            var items = _context.Words.Where(w => w.Value.Contains(myWord))
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize);
 
             if (!items.Any())
             {
