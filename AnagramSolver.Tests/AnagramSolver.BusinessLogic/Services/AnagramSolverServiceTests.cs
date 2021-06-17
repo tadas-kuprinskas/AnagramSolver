@@ -106,7 +106,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             var uniqueAnagrams = _anagramSolverService.FindMultipleWordsAnagrams(multipleWord);
 
             uniqueAnagrams.ShouldBeUnique();
-            uniqueAnagrams.Count().ShouldBe(6);
+            uniqueAnagrams.Count.ShouldBe(6);
         }
     }
 }

@@ -31,9 +31,7 @@ namespace AnagramSolver.BusinessLogic.Services
 
             foreach (var anagram in anagrams)
             {
-                var word = _wordRepository.GetWord(anagram.Value);
-
-                _cachedWordRepository.AddToAdditionalTable(word, cachedWord);
+                _cachedWordRepository.AddToAdditionalTable(anagram, cachedWord);
             }
 
             _wordRepository.SaveChanges();

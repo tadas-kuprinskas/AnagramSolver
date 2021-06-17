@@ -142,11 +142,6 @@ namespace AnagramSolver.Database
             return words;
         }
 
-        public Word GetWord(string myWord)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SaveChanges()
         {
             throw new NotImplementedException();

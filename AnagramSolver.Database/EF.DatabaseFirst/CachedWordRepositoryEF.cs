@@ -34,7 +34,7 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
                 Word = word,
                 CachedWord = cachedWord
             };
-            _context.WordCachedWordAdditionals.Add(additionalItem);
+            _context.Entry<WordCachedWordAdditional>(additionalItem).State = EntityState.Added;
         }
 
         public List<Word> GetCachedAnagrams(string myWord)

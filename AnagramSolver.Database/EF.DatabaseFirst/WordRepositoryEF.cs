@@ -87,13 +87,6 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
             return words;
         }
 
-        public Word GetWord(string wordToFind)
-        {
-            var word = _context.Words.First(x => x.Value == wordToFind);
-
-            return word;
-        }
-
         public void SaveChanges()
         {
             _context.SaveChanges();
