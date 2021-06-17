@@ -6,7 +6,7 @@ namespace AnagramSolver.Contracts.Interfaces
     public interface ISearchInformationRepository
     {
         void AddSearchInformation(SearchInformation searchInformation);
-        IEnumerable<SearchInformation> ReturnSearchInformation();
+        IList<SearchInformation> ReturnSearchInformation();
         void SaveChanges();
     }
 }

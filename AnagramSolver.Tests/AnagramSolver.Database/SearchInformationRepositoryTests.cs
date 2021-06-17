@@ -55,13 +55,13 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
         [Test]
         public void AddSearchInformation_GivenObject_NumberOfItemsIncreases()
         {
-            var numberBefore = _searchInformationRepository.ReturnSearchInformation().Count();
+            var numberBefore = _searchInformationRepository.ReturnSearchInformation().Count;
 
             var uniqueSearchInformation = _fixture.Create<SearchInformation>();
 
             _searchInformationRepository.AddSearchInformation(uniqueSearchInformation);
 
-            var numberAfter = _searchInformationRepository.ReturnSearchInformation().Count();
+            var numberAfter = _searchInformationRepository.ReturnSearchInformation().Count;
 
             numberBefore.ShouldBeLessThan(numberAfter);
         }

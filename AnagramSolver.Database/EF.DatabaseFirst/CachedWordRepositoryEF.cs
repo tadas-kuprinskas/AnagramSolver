@@ -20,13 +20,8 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
             _context = context;
         }
 
-        public CachedWord AddCachedWord(string myWord)
+        public CachedWord AddCachedWord(CachedWord cachedWord)
         {
-            var cachedWord = new CachedWord() 
-            { 
-                Value = myWord 
-            };
-
             _context.CachedWords.Add(cachedWord);
 
             return cachedWord;

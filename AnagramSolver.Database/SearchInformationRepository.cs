@@ -38,7 +38,7 @@ namespace AnagramSolver.Repository
             _sqlConnection.Close();
         }
 
-        public IEnumerable<SearchInformation> ReturnSearchInformation()
+        public IList<SearchInformation> ReturnSearchInformation()
         {
             _sqlConnection.Open();
 

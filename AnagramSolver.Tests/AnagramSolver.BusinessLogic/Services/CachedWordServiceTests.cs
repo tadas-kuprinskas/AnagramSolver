@@ -55,20 +55,12 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             _mockWordRepository = new();
 
             _mockCachedWordsRepository = new();
-            _mockCachedWordsRepository.Setup(m => m.AddCachedWord(_myWord)).Returns(_cachedWord);
+            _mockCachedWordsRepository.Setup(m => m.AddCachedWord(_cachedWord)).Returns(_cachedWord);
             _mockCachedWordsRepository.Setup(m => m.SearchCachedWord(_myWord)).Returns(cachedWord);
             _mockCachedWordsRepository.Setup(m => m.GetCachedAnagrams(_myWord)).Returns(words);
             _mockWordRepository.Setup(m => m.GetWord(_myWord)).Returns(_word);
 
             _cachedWordService = new(_mockCachedWordsRepository.Object, _mockWordRepository.Object);
-        }
-
-        [Test]
-        public void InsertCachedWordIntoTables_GivenCorrectValues_VerifyThatMethodWasCalled()
-        {
-            _cachedWordService.InsertCachedWordIntoTables(_myWord, _anagrams);
-
-            _mockCachedWordsRepository.Verify(m => m.AddToAdditionalTable(_word, _cachedWord), Times.AtLeastOnce);
         }
 
         [Test]

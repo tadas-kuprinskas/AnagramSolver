@@ -24,16 +24,16 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
             _context.Words.Add(word);
         }
 
-        public IEnumerable<Word> GetAllWords()
+        public IList<Word> GetAllWords()
         {
             return _context.Words.ToList();
         }
 
-        public IEnumerable<Word> GetPaginatedWords(int currentPage, int pageSize, string myWord)
+        public IList<Word> GetPaginatedWords(int currentPage, int pageSize, string myWord)
         {
             var items = _context.Words.Where(w => w.Value.Contains(myWord))
                 .Skip((currentPage - 1) * pageSize)
-                .Take(pageSize);
+                .Take(pageSize).ToList();
 
             return items;
         }
@@ -81,9 +81,9 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
             }
         }
 
-        public IEnumerable<Word> SearchForWords(string myWord)
+        public IList<Word> SearchForWords(string myWord)
         {
-            var words = _context.Words.Where(w => w.Value.Contains(myWord));
+            var words = _context.Words.Where(w => w.Value.Contains(myWord)).ToList();
             return words;
         }
 

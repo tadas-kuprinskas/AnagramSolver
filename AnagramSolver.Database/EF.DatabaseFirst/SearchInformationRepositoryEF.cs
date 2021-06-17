@@ -24,7 +24,7 @@ namespace AnagramSolver.Repository.EF.DatabaseFirst
             _context.SearchInformations.Add(searchInformation);
         }
 
-        public IEnumerable<SearchInformation> ReturnSearchInformation()
+        public IList<SearchInformation> ReturnSearchInformation()
         {
             return _context.SearchInformations.ToList();
         }

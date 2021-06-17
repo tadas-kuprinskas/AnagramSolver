@@ -18,7 +18,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
         private WordServiceDb _wordServiceDb;
         private Mock<IWordRepository> _mockWordRepository;
         private string _word;
-        private IEnumerable<Word> _results;
+        private IList<Word> _results;
 
         [SetUp]
         public void Setup()

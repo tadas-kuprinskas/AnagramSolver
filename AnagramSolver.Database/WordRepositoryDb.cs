@@ -24,7 +24,7 @@ namespace AnagramSolver.Repository
             _sqlConnection = new SqlConnection(_options.ConnectionString);
         }
 
-        public IEnumerable<Word> GetAllWords()
+        public IList<Word> GetAllWords()
         {
             var query = "Select * from Words";
 
@@ -53,7 +53,7 @@ namespace AnagramSolver.Repository
             return words;
         }
 
-        public IEnumerable<Word> GetPaginatedWords(int currentPage, int pageSize, string myWord)
+        public IList<Word> GetPaginatedWords(int currentPage, int pageSize, string myWord)
         {
             var firstWord = (currentPage - 1) * pageSize;
 
@@ -166,7 +166,7 @@ namespace AnagramSolver.Repository
             }
         }
 
-        public IEnumerable<Word> SearchForWords(string myWord)
+        public IList<Word> SearchForWords(string myWord)
         {
             var query = "Select * from Words where Value like @myWord";
 

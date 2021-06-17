@@ -22,7 +22,12 @@ namespace AnagramSolver.BusinessLogic.Services
 
         public void InsertCachedWordIntoTables(string myWord, List<Word> anagrams)
         {
-            var cachedWord = _cachedWordRepository.AddCachedWord(myWord);
+            CachedWord newCachedWord = new()
+            {
+                Value = myWord
+            };
+
+            var cachedWord = _cachedWordRepository.AddCachedWord(newCachedWord);
 
             foreach (var anagram in anagrams)
             {

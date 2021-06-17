@@ -23,7 +23,7 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
         [SetUp]
         public void Setup()
         {
-            _options = new() { FilePath = "Anagram_Solver.Contracts/Data/zodynas.txt" };
+            _options = new() { FilePath = "AnagramSolver.Contracts/Data/zodynas.txt" };
 
             var mockOptions = new Mock<IOptions<Settings>>();
             mockOptions.Setup(ap => ap.Value).Returns(_options);
@@ -45,7 +45,7 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
         {
            var wordList = _wordRepository.GetPaginatedWords(currentPage, pageSize, "sula");
 
-            wordList.Count().ShouldBe(20);
+            wordList.Count.ShouldBe(20);
         }
 
         [TestCase(2, 5)]
@@ -53,7 +53,7 @@ namespace AnagramSolver.Tests.AnagramSolver.Database
         {
             var wordList = _wordRepository.GetPaginatedWords(currentPage, pageSize, "veidas");
 
-            wordList.Count().ShouldBe(5);
+            wordList.Count.ShouldBe(5);
         }
     }
 }
