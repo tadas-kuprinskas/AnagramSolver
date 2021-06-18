@@ -44,6 +44,11 @@ namespace AnagramSolver.WebApi
 
             services.AddDbContext<AnagramSolverCodeFirstContext>(d => d.UseSqlServer(Configuration.GetConnectionString("CodeFirstConnection")));
 
+            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
+            {
+                builder.WithOrigins("http://localhost:44379").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
+
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
@@ -61,6 +66,8 @@ namespace AnagramSolver.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AnagramSolver.WebApi v1"));
             }
+
+            app.UseCors("ApiCorsPolicy");
 
             app.UseHttpsRedirection();
 
