@@ -25,7 +25,7 @@ namespace AnagramSolver.Repository
         public CachedWord SearchCachedWord(string myWord)
         {
             _sqlConnection.Open();
-            var sqlQuery = "Select * from Cached_Word where Word_Value = @myWord";
+            var sqlQuery = "Select * from CachedWords where Value = @myWord";
             SqlCommand command = new(sqlQuery, _sqlConnection);
             command.Parameters.Add(new SqlParameter("@myWord", myWord));
             SqlDataReader dataReader = command.ExecuteReader();
@@ -36,7 +36,7 @@ namespace AnagramSolver.Repository
                 {
                     cachedWord = new CachedWord()
                     {
-                        Value = dataReader["Word_Value"].ToString(),
+                        Value = dataReader["Value"].ToString(),
                         Id = int.Parse(dataReader["Id"].ToString())
                     };
                 }
@@ -46,25 +46,27 @@ namespace AnagramSolver.Repository
             return cachedWord;
         }
 
-        public int AddCachedWord(string myWord)
+        public CachedWord AddCachedWord(CachedWord cachedWordInput)
         {
             _sqlConnection.Open();
-            var insertQuery = "Insert into Cached_Word (Word_Value) output Inserted.Id values (@myWord)";
+            var insertQuery = "Insert into CachedWords (Value) output Inserted.Id values (@myWord)";
             SqlCommand command = new (insertQuery, _sqlConnection);
-            command.Parameters.Add(new SqlParameter("@myWord", myWord));
-            var Id = int.Parse(command.ExecuteScalar().ToString());
+            command.Parameters.Add(new SqlParameter("@myWord", cachedWordInput.Value));
+            var id = int.Parse(command.ExecuteScalar().ToString());
             _sqlConnection.Close();
 
-            return Id;
+            var cachedWord = new CachedWord() { Value = cachedWordInput.Value, Id = id };
+
+            return cachedWord;
         }
 
-        public void AddToAdditionalTable(int wordId, int cachedWordId)
+        public void AddToAdditionalTable(Word word, CachedWord cachedWord)
         {
             _sqlConnection.Open();
-            var sqlQueryinsert = "Insert into Word_CachedWord_Additional (Word_Id, CachedWord_Id) values (@WordId, @CachedWordId)";
+            var sqlQueryinsert = "Insert into WordCachedWordAdditionals (WordId, CachedWordId) values (@WordId, @CachedWordId)";
             SqlCommand command = new (sqlQueryinsert, _sqlConnection);
-            command.Parameters.Add(new SqlParameter("@WordId", wordId));
-            command.Parameters.Add(new SqlParameter("@CachedWordId", cachedWordId));
+            command.Parameters.Add(new SqlParameter("@WordId", word.Id));
+            command.Parameters.Add(new SqlParameter("@CachedWordId", cachedWord.Id));
             command.ExecuteNonQuery();
             _sqlConnection.Close();
         }
@@ -73,9 +75,9 @@ namespace AnagramSolver.Repository
         {
             _sqlConnection.Open();
 
-            var sqlQuery = "Select Word.Id, Word.Value from Cached_Word inner join Word_CachedWord_Additional on" +
-                                    " Cached_Word.Id = Word_CachedWord_Additional.CachedWord_Id inner join Word on" +
-                                    " Word_CachedWord_Additional.Word_Id = Word.Id where Cached_Word.Word_Value = @myWord";
+            var sqlQuery = "Select Words.Id, Words.Value from CachedWords inner join WordCachedWordAdditionals on" +
+                                    " CachedWords.Id = WordCachedWordAdditionals.CachedWordId inner join Words on" +
+                                    " WordCachedWordAdditionals.WordId = Words.Id where CachedWords.Value = @myWord";
 
             SqlCommand command = new(sqlQuery, _sqlConnection);
             command.Parameters.Add(new SqlParameter("@myWord", myWord));

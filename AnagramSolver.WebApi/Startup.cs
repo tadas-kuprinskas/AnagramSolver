@@ -19,6 +19,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AnagramSolver.EF.DatabaseFirst.Data;
+using Microsoft.EntityFrameworkCore;
+using AnagramSolver.EF.CodeFirst.Data;
 
 namespace AnagramSolver.WebApi
 {
@@ -39,6 +42,13 @@ namespace AnagramSolver.WebApi
             services.Configure<Settings>(Configuration.GetSection(
                                         Settings.HandlingOptions));
 
+            services.AddDbContext<AnagramSolverCodeFirstContext>(d => d.UseSqlServer(Configuration.GetConnectionString("CodeFirstConnection")));
+
+            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
+            {
+                builder.WithOrigins("http://localhost:44379").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
+
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
@@ -56,6 +66,8 @@ namespace AnagramSolver.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AnagramSolver.WebApi v1"));
             }
+
+            app.UseCors("ApiCorsPolicy");
 
             app.UseHttpsRedirection();
 

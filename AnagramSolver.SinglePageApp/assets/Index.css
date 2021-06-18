@@ -1,0 +1,32 @@
+a.nav-link{
+    color: white;
+}
+
+.anagramSection, .infoSection{
+    background-color: rgb(210, 238, 238);
+}
+
+.wordSection{
+    background-color: rgb(237, 237, 243);
+}
+
+form{
+    text-align: -webkit-center;
+}
+
+.download, .info {
+    display: block;
+    background: #4E9CAF;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    line-height: 25px;
+    cursor: pointer;
+}
+
+.information{
+    text-align: -webkit-center;
+    padding-top: 25px;
+}

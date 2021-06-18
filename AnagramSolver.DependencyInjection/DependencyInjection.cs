@@ -4,6 +4,7 @@ using AnagramSolver.BusinessLogic.Utilities;
 using AnagramSolver.Contracts.Interfaces;
 using AnagramSolver.Database;
 using AnagramSolver.Repository;
+using AnagramSolver.Repository.EF.DatabaseFirst;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,15 +19,18 @@ namespace AnagramSolver.DependencyInjection
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IAnagramSolverService, AnagramSolverService>()
-                    .AddScoped<IWordRepository, WordRepositoryDb>()
-                    .AddScoped<ICachedWordRepository, CachedWordRepository>()
+                    //.AddScoped<IWordRepository, WordRepositoryDb>()
+                    //.AddScoped<ICachedWordRepository, CachedWordRepository>()
+                    .AddScoped<ICachedWordRepository, CachedWordRepositoryEF>()
                     .AddScoped<ICachedWordService, CachedWordService>()
                     .AddScoped<IWordServiceDb, WordServiceDb>()
+                    .AddScoped<IWordRepository, WordRepositoryEF>()
                     //.AddScoped<IWordRepository, WordRepository>()
                     .AddScoped<IValidationService, ValidationService>()
                     .AddScoped<IClientService, AnagramClientService>()
                     .AddScoped<ISearchInformationService, SearchInformationService>()
-                    .AddScoped<ISearchInformationRepository, SearchInformationRepository>()
+                    //.AddScoped<ISearchInformationRepository, SearchInformationRepository>()
+                    .AddScoped<ISearchInformationRepository, SearchInformationRepositoryEF>()
                     .AddHttpClient()
                     .TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

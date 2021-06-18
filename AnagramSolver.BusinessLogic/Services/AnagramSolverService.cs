@@ -43,22 +43,22 @@ namespace AnagramSolver.BusinessLogic.Services
             return anagrams;
         }
 
-        public IEnumerable<Word> FindSingleWordAnagrams(string orderedWord)
+        public IList<Word> FindSingleWordAnagrams(string orderedWord)
         {
             var anagrams = _wordRepository.ReadAndGetDictionary();
 
             if (anagrams.ContainsKey(orderedWord))
             {
-                return anagrams[orderedWord].Take(_options.NumberOfAnagrams);
+                return anagrams[orderedWord].Take(_options.NumberOfAnagrams).ToList();
             }
-            return Enumerable.Empty<Word>();
+            return Array.Empty<Word>();
         }
 
-        public IEnumerable<Word> FindMultipleWordsAnagrams(string myWordTrimmed)
+        public IList<Word> FindMultipleWordsAnagrams(string myWordTrimmed)
         {
             var words = myWordTrimmed.Split(" ");
 
-            var anagrams = words.SelectMany(x => FindSingleWordAnagrams(String.Concat(x.ToLower().OrderBy(c => c))).OrderBy(w => w.PartOfSpeech));
+            var anagrams = words.SelectMany(x => FindSingleWordAnagrams(String.Concat(x.ToLower().OrderBy(c => c))).OrderBy(w => w.PartOfSpeech)).ToList();
 
             return anagrams;
         }

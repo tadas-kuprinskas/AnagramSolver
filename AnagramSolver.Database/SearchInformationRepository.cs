@@ -25,7 +25,7 @@ namespace AnagramSolver.Repository
         public void AddSearchInformation(SearchInformation searchInformation)
         {
             _sqlConnection.Open();
-            var insertQuery = "Insert into SearchInformation (UserIp, SearchTime, SearchedWord, Anagrams) " +
+            var insertQuery = "Insert into SearchInformations (UserIp, SearchTime, SearchedWord, Anagram) " +
                 "VALUES (@UserIp, @SearchTime, @SearchedWord, @Anagrams)";
             SqlCommand command = new(insertQuery, _sqlConnection);
 
@@ -38,11 +38,11 @@ namespace AnagramSolver.Repository
             _sqlConnection.Close();
         }
 
-        public IEnumerable<SearchInformation> ReturnSearchInformation()
+        public IList<SearchInformation> ReturnSearchInformation()
         {
             _sqlConnection.Open();
 
-            var insertQuery = "Select * from SearchInformation";
+            var insertQuery = "Select * from SearchInformations";
 
             List<SearchInformation> searchInformation = new();
 
@@ -60,7 +60,7 @@ namespace AnagramSolver.Repository
                                 UserIp = dataReader["UserIp"].ToString(),
                                 SearchTime = DateTime.Parse(dataReader["SearchTime"].ToString()),
                                 SearchedWord = dataReader["SearchedWord"].ToString(),
-                                Anagram = dataReader["Anagrams"].ToString()
+                                Anagram = dataReader["Anagram"].ToString()
                             });
                     }
                 }
@@ -68,6 +68,11 @@ namespace AnagramSolver.Repository
             }
             _sqlConnection.Close();
             return searchInformation;
+        }
+
+        public void SaveChanges()
+        {
+            throw new NotImplementedException();
         }
     }
 }

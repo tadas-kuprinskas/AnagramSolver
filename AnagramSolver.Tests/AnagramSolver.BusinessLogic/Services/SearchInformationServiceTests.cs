@@ -32,7 +32,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
             _uniqueAnagrams = new() { new Word() { Id = 1, OrderedValue = "aaikkprt", PartOfSpeech = "vksm", Value = "parkakti" } };
 
             _mockSearchInformationRepository = new();
-            var allSearches = fixture.CreateMany<SearchInformation>(4);
+            var allSearches = fixture.CreateMany<SearchInformation>(4).ToList();
             _mockSearchInformationRepository.Setup(m => m.ReturnSearchInformation()).Returns(allSearches);
 
             var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
@@ -40,7 +40,6 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
 
             mockHttpContextAccessor.Setup(p => p.HttpContext.Connection.RemoteIpAddress).Returns(ipAddress);
 
-            //_mockClientService.Setup(m => m.GetUserIP()).Returns("1");
             _searchInformationService = new(_mockSearchInformationRepository.Object, mockHttpContextAccessor.Object);
         }
 
@@ -64,7 +63,7 @@ namespace AnagramSolver.Tests.AnagramSolver.BusinessLogic.Services
         [Test]
         public void ReturnAllSearches_GivenEmptyListIfNoSearchesWereMade_ReturnsEmptyCollection()
         {
-            _mockSearchInformationRepository.Setup(m => m.ReturnSearchInformation()).Returns(Enumerable.Empty<SearchInformation>());
+            _mockSearchInformationRepository.Setup(m => m.ReturnSearchInformation()).Returns(Enumerable.Empty<SearchInformation>().ToList());
 
             var searchList = _searchInformationService.ReturnAllSearches();
 

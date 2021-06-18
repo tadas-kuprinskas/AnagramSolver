@@ -6,8 +6,8 @@ namespace AnagramSolver.Contracts.Interfaces
     public interface ICachedWordRepository
     {
         CachedWord SearchCachedWord(string myWord);
-        int AddCachedWord(string myWord);
-        void AddToAdditionalTable(int wordId, int cachedWordId);
+        CachedWord AddCachedWord(CachedWord cachedWord);
+        void AddToAdditionalTable(Word word, CachedWord cachedWord);
         List<Word> GetCachedAnagrams(string myWord);
     }
 }
