@@ -1,5 +1,5 @@
 document.write(`
-  <div class="container text-center">
+  <div class="container text-center anagramSection">
     <div class="row vertical-center">
       <div class="col">
         <img class="mt-3" src="https://www.computerhope.com/jargon/u/user-friendly.jpg" alt="Img">
@@ -12,8 +12,8 @@ document.write(`
           <button onclick="cleanTable()" type="submit" class="btn btn-danger mt-3">Clear table</button>
         </form>
       </div>
-      <div class="container mt-5" id="anagramTable">
-        <h3>Anagrams</h3>
+      <div class="container mt-5 mb-5" id="anagramTable">
+        
         <table class="table table-primary mt-3">
             <thead class="thead-light">
             <tr>

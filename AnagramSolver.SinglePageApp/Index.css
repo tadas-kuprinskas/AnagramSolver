@@ -2,6 +2,14 @@ a.nav-link{
     color: white;
 }
 
+.anagramSection{
+    background-color: rgb(210, 238, 238);
+}
+
+.wordSection{
+    background-color: rgb(237, 237, 243);
+}
+
 form{
     text-align: -webkit-center;
 }
