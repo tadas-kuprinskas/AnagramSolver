@@ -1,12 +1,29 @@
-anagramTable = document.querySelector(".anagramTBody");
-wordsToFindTable = document.querySelector(".wordsToFindTbody");
-searchHistoryTable = document.querySelector(".searchHistoryTBody");
+const anagramTable = document.querySelector(".anagramTBody");
+const wordsToFindTable = document.querySelector(".wordsToFindTbody");
+const searchHistoryTable = document.querySelector(".searchHistoryTBody");
+
+let myWord = document.getElementById("myWord");
+let wordToFind = document.getElementById("wordToFind");
+let wordNumber = document.getElementById("numberToFind");
+let pageNumber = document.getElementById("pageToFind");
 
 let wordToSearch = document.getElementById("myWord");
 
 function getAllAnagrams(){ 
+    
+    var myInput = myWord.value;
 
-    var anagrams = Service.getAnagrams();
+    try{
+        if (myInput.length < 3){
+        throw "The word is too short. It has to be longer than 3 symbols";
+        }
+    }
+    catch(err){
+        alert(err);
+        return;
+    };
+
+    var anagrams = Service.getAnagrams(myWord.value);
     anagrams.then((anagram) =>
     {
         anagram.forEach(element => {
@@ -17,7 +34,7 @@ function getAllAnagrams(){
 
 function getPaginatedWords(){
 
-    var paginatedWords = Service.getWordsPaginated();
+    var paginatedWords = Service.getWordsPaginated(pageNumber.value, wordNumber.value, wordToFind.value);
     paginatedWords.then((pWord) =>
     {
         pWord.forEach(el => {
