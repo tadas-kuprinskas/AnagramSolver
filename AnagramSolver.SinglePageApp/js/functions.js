@@ -1,8 +1,8 @@
 anagramTable = document.querySelector(".anagramTBody");
 wordsToFindTable = document.querySelector(".wordsToFindTbody");
+searchHistoryTable = document.querySelector(".searchHistoryTBody");
 
 let wordToSearch = document.getElementById("myWord");
-//document.getElementById("buttonToFindWords").addEventListener('click', getPaginatedWords());
 
 function getAllAnagrams(){ 
 
@@ -57,3 +57,45 @@ function createTableForWords(el)
 
     wordsToFindTable.appendChild(tRow);  
 }
+
+function downloadDictionaryFile(){
+    Service.downloadFile();
+}
+
+function getSearchInformation(){ 
+
+    var searchInfos = Service.getSearchInformation();
+    searchInfos.then( (searchInfo) =>
+    {
+        searchInfo.forEach(element => {
+            let searchInformation = new SearchInformation(element.id, element.userIp, element.searchTime, element.searchedWord, element.anagram);
+            createInfoTable(searchInformation);
+        })
+    });
+}
+
+function createInfoTable(info){
+
+    let tRow= document.createElement("tr");
+
+    let col = document.createElement("th");
+    col.innerHTML=info.userIp;
+    tRow.appendChild(col);
+
+    let secondCol = document.createElement("th");
+    secondCol.innerHTML=info.searchTime;
+    tRow.appendChild(secondCol);
+
+    let thirdCol = document.createElement("th");
+    thirdCol.innerHTML=info.searchedWord;
+    tRow.appendChild(thirdCol);
+
+    let fourthCol = document.createElement("th");
+    fourthCol.innerHTML=info.anagram;
+    tRow.appendChild(fourthCol);
+
+    searchHistoryTable.appendChild(tRow);  
+}
+
+
+
